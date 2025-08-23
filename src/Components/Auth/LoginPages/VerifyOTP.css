@@ -1,0 +1,94 @@
+.auth-parent {
+  background-color: #242531;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.left {
+  background-color: #E0E0E2;
+  width: 40vw;
+  height: 100vh;
+  border-top-right-radius: 5%;
+  border-bottom-right-radius: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  background: #E0E0E2;
+}
+
+.otp-form {
+  width: 40vh;
+  padding: 4vh;
+}
+
+.otp-form h2 {
+  margin-bottom: 3vh;
+  color: #2B2F38;
+}
+
+.form-subtitle {
+  font-size: 1.8vh;
+  margin-bottom: 4vh;
+  color: #667085;
+}
+
+.otp-form label {
+  font-size: 1.8vh;
+}
+
+.otp-form input {
+  display: block;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+  width: 93%;
+  padding: 1.5vh;
+  font-size: 2vh;
+  border: none;
+  border-radius: 1vh;
+  background-color: white;
+  outline: none;
+  text-align: center;
+  letter-spacing: 0.8vh;
+}
+
+.otp-form button {
+  width: 100%;
+  padding: 1.8vh;
+  font-size: 2vh;
+  background: #242531;
+  color: white;
+  border: none;
+  border-radius: 1vh;
+  cursor: pointer;
+}
+
+.right {  
+  width: 60vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-container {
+  width: 60%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-container img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+

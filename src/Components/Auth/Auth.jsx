@@ -1,11 +1,11 @@
 import React from "react";
-import LoginYourAcc from "./LoginPages/LoginYourAcc";
-import CreateAcc from "./LoginPages/CreateAcc";
+import ResetPassword from "./LoginPages/ResetPassword";
+
 
 export default function Auth() {
   return (
     <>
-      <CreateAcc/>
+      <ResetPassword/>
     </>
   );
 }
