@@ -1,0 +1,19 @@
+.sidebar{
+  background-color: #242531;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar hr {
+  border: none;
+  border-top: 0.1rem solid gray;
+  width: 100%;
+}
+
+.sidebar-logo{
+  background-color: red;
+  width: 100%;
+  height: 5%;
+}

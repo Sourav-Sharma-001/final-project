@@ -1,0 +1,17 @@
+.dashboard-container{
+  background-color: yellow;
+  display: flex; 
+  width: 100vw;
+  height: 100vh;
+}
+
+.sidebar-container{
+  width: 12vw;
+  height: 100vh;
+}
+
+.overview-container{
+  background-color: aqua;
+  width: 88vw;
+  height: 100vh;
+}

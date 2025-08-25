@@ -1,10 +1,11 @@
 import Auth from "./Components/Auth/Auth"
 import "./App.css"
+import Dashboard from "./Components/Dashboard/Dashboard"
 
 function App() {
   return (
     <>
-     <Auth/>
+     <Dashboard/>
     </>
   )
 }
