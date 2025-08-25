@@ -4,7 +4,8 @@ import "./Overview.css"
 export default function Overview() {
   return (
     <div>
-      
+      <div></div>
+      <div></div>
     </div>
   )
 }
