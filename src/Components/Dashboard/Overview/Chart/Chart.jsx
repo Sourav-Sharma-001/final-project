@@ -72,21 +72,23 @@ const Chart = () => {
           </select>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height="85%">
-        <BarChart
-          data={chartData}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          barGap={10}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" tick={{ fontSize: 12, fontWeight: 500 }} />
-          <YAxis tick={{ fontSize: 12, fontWeight: 500 }} />
-          <Tooltip contentStyle={{ fontSize: 12 }} itemStyle={{ fontSize: 12 }} />
-          <Legend wrapperStyle={{ fontSize: 12, fontWeight: 500 }} />
-          <Bar dataKey="Sales" fill="#4f46e5" barSize={getBarSize()} />
-          <Bar dataKey="Purchase" fill="#f97316" barSize={getBarSize()} />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="chart-body">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            barGap={10}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" tick={{ fontSize: 12, fontWeight: 500 }} />
+            <YAxis tick={{ fontSize: 12, fontWeight: 500 }} />
+            <Tooltip contentStyle={{ fontSize: 12 }} itemStyle={{ fontSize: 12 }} />
+            <Legend wrapperStyle={{ fontSize: 12, fontWeight: 500 }} />
+            <Bar dataKey="Sales" fill="#4f46e5" barSize={getBarSize()} />
+            <Bar dataKey="Purchase" fill="#f97316" barSize={getBarSize()} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
