@@ -42,12 +42,15 @@ const Chart = () => {
     { name: "2024", Sales: 250000, Purchase: 210000 },
   ];
 
-  const [chartData, setChartData] = useState(monthlyData);
+  const [chartData, setChartData] = useState(weeklyData);
+  const [period, setPeriod] = useState("weekly");
 
   const handleChange = (e) => {
-    if (e.target.value === "weekly") setChartData(weeklyData);
-    else if (e.target.value === "yearly") setChartData(yearlyData);
-    else setChartData(monthlyData);
+    const value = e.target.value;
+    setPeriod(value);
+    if (value === "weekly") setChartData(weeklyData);
+    else if (value === "monthly") setChartData(monthlyData);
+    else if (value === "yearly") setChartData(yearlyData);
   };
 
   const getBarSize = () => {
@@ -62,9 +65,9 @@ const Chart = () => {
       <div className="chart-header">
         <h3 className="chart-title">Sales vs Purchase</h3>
         <div className="chart-dropdown">
-          <select onChange={handleChange}>
-            <option value="monthly">Monthly</option>
+          <select onChange={handleChange} value={period}>
             <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
           </select>
         </div>
