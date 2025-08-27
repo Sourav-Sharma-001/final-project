@@ -1,15 +1,14 @@
 import React from "react";
-import Navbar from "../Navbar/Navbar";
 import "./Product.css";
 import OverallInventory from "./OverallInventory/OverallInventory";
+import Navbar from "../Navbar/Navbar";
 
 export default function Product() {
   return (
     <div className="product">
-      <Navbar />
+      <Navbar/>
       <div className="product-content-container">
-        <OverallInventory />
-        <PurchaseOverview />
+        <OverallInventory />        
       </div>
     </div>
   );

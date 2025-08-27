@@ -1,12 +1,12 @@
 import React from "react";
 import "./Home.css";
-import Navbar from "./Navbar/Navbar";
 import SalesOverview from "./SalesOverview/SalesOverview";
 import PurchaseOverview from "./PurchaseOverview/PurchaseOverview";
 import PurchaseSummary from "./PurchaseSummary/PurchaseSummary";
 import InventorySummary from "./InventorySummary/InventorySummary";
 import TopProducts from "./TopProducts/TopProducts";
 import Chart from "./Chart/Chart";
+import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
   return (
