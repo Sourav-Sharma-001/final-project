@@ -63,7 +63,7 @@ const Chart = () => {
   return (
     <div className="chart-container">
       <div className="chart-header">
-        <h3 className="chart-title">Sales vs Purchase</h3>
+        <h3 className="chart-title">Sales & Purchase</h3>
         <div className="chart-dropdown">
           <select onChange={handleChange} value={period}>
             <option value="weekly">Weekly</option>
