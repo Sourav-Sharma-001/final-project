@@ -1,5 +1,5 @@
 import React from "react";
-import "./Overview.css";
+import "./Home.css";
 import Navbar from "./Navbar/Navbar";
 import SalesOverview from "./SalesOverview/SalesOverview";
 import PurchaseOverview from "./PurchaseOverview/PurchaseOverview";
@@ -8,19 +8,19 @@ import InventorySummary from "./InventorySummary/InventorySummary";
 import TopProducts from "./TopProducts/TopProducts";
 import Chart from "./Chart/Chart";
 
-export default function Overview() {
+export default function Home() {
   return (
-    <div className="overview">
+    <div className="home">
       <Navbar />
-      <div className="overview-content-conatiner">
-        <div className="left-overview-container">
+      <div className="home-content-container">
+        <div className="left-home-container">
           <SalesOverview />
           <PurchaseOverview />
           <div className="graph">
             <Chart />
           </div>
         </div>
-        <div className="right-overview-container">
+        <div className="right-home-container">
           <InventorySummary />
           <PurchaseSummary />
           <TopProducts />
@@ -29,5 +29,3 @@ export default function Overview() {
     </div>
   );
 }
-
-//before drag and drop
