@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import ViewInvoice from "./ViewInvoice/ViewInvoice"; 
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,6 +47,16 @@ export default function InvoiceTable() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (selectedInvoice) {
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = previous || "";
+      };
+    }
+  }, [selectedInvoice]);
+
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);
     setOpenDropdown(null);
@@ -74,7 +85,7 @@ export default function InvoiceTable() {
           </thead>
           <tbody>
             {currentRows.map((invoice, i) => (
-              <tr key={i}>
+              <tr key={invoice.id}>
                 <td>{invoice.id}</td>
                 <td>{invoice.reference}</td>
                 <td>₹ {invoice.amount}</td>
@@ -87,20 +98,23 @@ export default function InvoiceTable() {
                   <button
                     className="dots-button"
                     onClick={() => toggleDropdown(i)}
+                    aria-label="options"
                   >
                     ⋮
                   </button>
                   {openDropdown === i && (
-                    <div className="dropdown-menu">
+                    <div className="dropdown-menu" role="menu">
                       <div
                         className="dropdown-item"
                         onClick={() => handleViewInvoice(invoice)}
+                        role="menuitem"
                       >
                         <LiaEyeSolid size={18} /> View Invoice
                       </div>
                       <div
                         className="dropdown-item"
                         onClick={() => handleDeleteInvoice(invoice)}
+                        role="menuitem"
                       >
                         <RiDeleteBin6Line size={18} /> Delete
                       </div>
@@ -133,47 +147,28 @@ export default function InvoiceTable() {
       </div>
 
       {selectedInvoice && (
-        <div className="invoice-modal">
-          <div className="invoice-modal-content">
-            <h2>SuperMart Pvt. Ltd.</h2>
-            <p>123 Market Street, New Delhi</p>
-            <p>GSTIN: 22AAAAA0000A1Z5</p>
-            <hr />
-            <h3>Invoice Slip</h3>
-            <p><b>Invoice ID:</b> {selectedInvoice.id}</p>
-            <p><b>Reference:</b> {selectedInvoice.reference}</p>
-            <p><b>Customer:</b> {selectedInvoice.customer}</p>
-            <p><b>Status:</b> {selectedInvoice.status}</p>
-            <p><b>Due Date:</b> {selectedInvoice.dueDate}</p>
-            <hr />
-            <table className="invoice-items">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedInvoice.items.map((item, i) => (
-                  <tr key={i}>
-                    <td>{item.name}</td>
-                    <td>{item.qty}</td>
-                    <td>₹ {item.price}</td>
-                    <td>₹ {item.qty * item.price}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <hr />
-            <h3>Total: ₹ {selectedInvoice.amount}</h3>
+        <div
+          className="modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedInvoice(null);
+          }}
+        >
+          <div
+            className="modal-box"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Invoice ${selectedInvoice.id}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
-              className="close-modal"
+              className="close-btn"
+              aria-label="Close invoice"
               onClick={() => setSelectedInvoice(null)}
             >
-              Close
+              ✕
             </button>
+
+            <ViewInvoice invoice={selectedInvoice} />
           </div>
         </div>
       )}
