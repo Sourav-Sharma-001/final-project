@@ -2,22 +2,28 @@ import React, { useState } from "react";
 import "./Multiple.css";
 import { FaFileCsv } from "react-icons/fa6";
 
-
 export default function Multiple({ onClose }) {
   const [file, setFile] = useState(null);
   const [step, setStep] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    if (step === 1) setFile(e.target.files[0]);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    setFile(e.dataTransfer.files[0]);
+    setIsDragging(false);
+    if (step === 1) setFile(e.dataTransfer.files[0]);
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
+    if (step === 1) setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   const handleNext = () => {
@@ -37,9 +43,10 @@ export default function Multiple({ onClose }) {
         <h3>Upload CSV File</h3>
 
         <div
-          className="drag-drop-zone"
+          className={`drag-drop-zone ${isDragging ? "dragging" : ""} ${step === 2 ? "readonly" : ""}`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
         >
           {file ? (
             <p>{file.name}</p>
@@ -63,8 +70,11 @@ export default function Multiple({ onClose }) {
 
         {step === 2 && file && (
           <div className="file-preview">
-            <div><FaFileCsv size={20}/></div>
-            <span>{file.name}</span>
+            <FaFileCsv size={20} />
+            <div className="file-info">
+              <span>{file.name}</span>
+              <p>{(file.size / 1024).toFixed(2)} KB</p>
+            </div>
           </div>
         )}
 

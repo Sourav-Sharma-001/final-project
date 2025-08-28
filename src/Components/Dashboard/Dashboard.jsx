@@ -1,7 +1,7 @@
 import React from "react";
 import "./Dashboard.css";
 import Sidebar from "./Sidebar/Sidebar";
-import Product from "./Product/Product";
+import Invoice from "./Invoice/Invoice";
 
 export default function Dashboard() {
   return (
@@ -10,7 +10,7 @@ export default function Dashboard() {
         <Sidebar />
       </div>
       <div className="pages-container">
-        <Product />
+        <Invoice/>
       </div>
     </div>
   );
