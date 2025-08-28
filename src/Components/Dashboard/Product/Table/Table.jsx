@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import "./Table.css";
+import Multiple from './Multiple/Multiple';
 
 export default function Table() {
   const [showModal, setShowModal] = useState(false);
+  const [showMultiple, setShowMultiple] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
   const rowsPerPage = 7;
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+
+  const openMultiple = () => {
+    setShowModal(false);
+    setShowMultiple(true);
+  };
+
+  const closeMultiple = () => setShowMultiple(false);
 
   const products = Array.from({ length: 40 }).map((_, i) => ({
     name: `Product ${i + 1}`,
@@ -103,10 +112,14 @@ export default function Table() {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <button className="modal-button">Individual Product</button>
-            <button className="modal-button">Multiple Product</button>
+            <button className="modal-button" onClick={openMultiple}>
+              Multiple Product
+            </button>
           </div>
         </div>
       )}
+
+      {showMultiple && <Multiple onClose={closeMultiple} />}
     </div>
   );
 }
