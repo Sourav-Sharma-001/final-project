@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import "./Table.css";
 
 export default function Table() {
+  const [showMenu, setShowMenu] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 8; 
@@ -49,7 +50,23 @@ export default function Table() {
                 <td>{product.qty}</td>
                 <td>{product.threshold}</td>
                 <td>{product.expiry}</td>
-                <td>{product.status}</td>
+                <td className="availability-cell">
+                  <span className="availability-text">{product.status}</span>
+                  <div className="dropdown-wrapper">
+                    <button
+                      className="dots-button"
+                      onClick={() => setShowMenu(showMenu === i ? null : i)}
+                    >
+                      ⋮
+                    </button>
+                    {showMenu === i && (
+                      <div className="dropdown-menu">
+                        <div className="dropdown-item">Edit</div>
+                        <div className="dropdown-item">Delete</div>
+                      </div>
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
