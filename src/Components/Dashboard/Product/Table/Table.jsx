@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import "./Table.css";
 
 export default function Table() {
-  const [showMenu, setShowMenu] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 8; 
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const rowsPerPage = 7;
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -22,6 +22,10 @@ export default function Table() {
   const totalPages = Math.ceil(products.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentRows = products.slice(startIndex, startIndex + rowsPerPage);
+
+  const toggleDropdown = (index) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
 
   return (
     <div className='table-container'>
@@ -55,11 +59,11 @@ export default function Table() {
                   <div className="dropdown-wrapper">
                     <button
                       className="dots-button"
-                      onClick={() => setShowMenu(showMenu === i ? null : i)}
+                      onClick={() => toggleDropdown(i)}
                     >
                       ⋮
                     </button>
-                    {showMenu === i && (
+                    {openDropdown === i && (
                       <div className="dropdown-menu">
                         <div className="dropdown-item">Edit</div>
                         <div className="dropdown-item">Delete</div>
