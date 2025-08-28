@@ -3,16 +3,14 @@ import "./Product.css";
 import OverallInventory from "./OverallInventory/OverallInventory";
 import Navbar from "../Navbar/Navbar";
 import Table from "./Table/Table";
+import Multiple from "./Table/Multiple/Multiple";
 
 
 export default function Product() {
   return (
     <div className="product">
       <Navbar/>
-      <div className="product-content-container">
-        <OverallInventory />
-        <Table/>       
-      </div>
+      <Multiple/>
     </div>
   );
 }
