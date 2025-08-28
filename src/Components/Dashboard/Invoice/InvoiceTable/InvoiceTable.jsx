@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -6,6 +6,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   const rowsPerPage = 9;
   const dropdownRefs = useRef([]);
 
@@ -14,7 +15,13 @@ export default function InvoiceTable() {
     reference: `REF-${2000 + i}`,
     amount: 100 + i * 10,
     status: i % 2 === 0 ? "Paid" : "Pending",
-    dueDate: "2025-12-31"
+    dueDate: "2025-12-31",
+    customer: `Customer ${i + 1}`,
+    items: [
+      { name: "Rice", qty: 2, price: 50 },
+      { name: "Milk", qty: 1, price: 30 },
+      { name: "Bread", qty: 3, price: 25 },
+    ],
   }));
 
   const totalPages = Math.ceil(invoices.length / rowsPerPage);
@@ -28,7 +35,9 @@ export default function InvoiceTable() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        dropdownRefs.current.every(ref => ref && !ref.contains(event.target))
+        dropdownRefs.current.every(
+          (ref) => ref && !ref.contains(event.target)
+        )
       ) {
         setOpenDropdown(null);
       }
@@ -37,12 +46,22 @@ export default function InvoiceTable() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleViewInvoice = (invoice) => {
+    setSelectedInvoice(invoice);
+    setOpenDropdown(null);
+  };
+
+  const handleDeleteInvoice = (invoice) => {
+    alert(`Deleted ${invoice.id}`);
+    setOpenDropdown(null);
+  };
+
   return (
-    <div className='invoice-table-container'>
-      <div className='invoice-table-heading'>
+    <div className="invoice-table-container">
+      <div className="invoice-table-heading">
         <h3>Invoice List</h3>
       </div>
-      <div className='invoice-table'>
+      <div className="invoice-table">
         <table>
           <thead>
             <tr>
@@ -62,19 +81,28 @@ export default function InvoiceTable() {
                 <td>{invoice.status}</td>
                 <td
                   className="due-date-cell"
-                  ref={el => dropdownRefs.current[i] = el}
+                  ref={(el) => (dropdownRefs.current[i] = el)}
                 >
                   <span>{invoice.dueDate}</span>
-                  <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
+                  <button
+                    className="dots-button"
+                    onClick={() => toggleDropdown(i)}
+                  >
+                    ⋮
+                  </button>
                   {openDropdown === i && (
                     <div className="dropdown-menu">
-                      <div className="dropdown-item">
-                        <LiaEyeSolid size={20} style={{backgroundColor:"lightblue"}}/>
-                        View Invoice
+                      <div
+                        className="dropdown-item"
+                        onClick={() => handleViewInvoice(invoice)}
+                      >
+                        <LiaEyeSolid size={18} /> View Invoice
                       </div>
-                      <div className="dropdown-item">
-                        <RiDeleteBin6Line size={20} style={{backgroundColor:"orange"}}/>
-                        Delete
+                      <div
+                        className="dropdown-item"
+                        onClick={() => handleDeleteInvoice(invoice)}
+                      >
+                        <RiDeleteBin6Line size={18} /> Delete
                       </div>
                     </div>
                   )}
@@ -87,7 +115,7 @@ export default function InvoiceTable() {
       <div className="invoice-pagination">
         <button
           className="invoice-pagination-button"
-          onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
@@ -97,12 +125,58 @@ export default function InvoiceTable() {
         </span>
         <button
           className="invoice-pagination-button"
-          onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
           Next
         </button>
       </div>
+
+      {selectedInvoice && (
+        <div className="invoice-modal">
+          <div className="invoice-modal-content">
+            <h2>SuperMart Pvt. Ltd.</h2>
+            <p>123 Market Street, New Delhi</p>
+            <p>GSTIN: 22AAAAA0000A1Z5</p>
+            <hr />
+            <h3>Invoice Slip</h3>
+            <p><b>Invoice ID:</b> {selectedInvoice.id}</p>
+            <p><b>Reference:</b> {selectedInvoice.reference}</p>
+            <p><b>Customer:</b> {selectedInvoice.customer}</p>
+            <p><b>Status:</b> {selectedInvoice.status}</p>
+            <p><b>Due Date:</b> {selectedInvoice.dueDate}</p>
+            <hr />
+            <table className="invoice-items">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedInvoice.items.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.name}</td>
+                    <td>{item.qty}</td>
+                    <td>₹ {item.price}</td>
+                    <td>₹ {item.qty * item.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <hr />
+            <h3>Total: ₹ {selectedInvoice.amount}</h3>
+            <button
+              className="close-modal"
+              onClick={() => setSelectedInvoice(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
