@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import ViewInvoice from "./ViewInvoice/ViewInvoice"; 
+import ViewInvoice from "./ViewInvoice/ViewInvoice"; // import your component
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +33,16 @@ export default function InvoiceTable() {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  const handleViewInvoice = (invoice) => {
+    setSelectedInvoice(invoice); // set invoice to pass to ViewInvoice
+    setOpenDropdown(null);
+  };
+
+  const handleDeleteInvoice = (invoice) => {
+    alert(`Deleted ${invoice.id}`);
+    setOpenDropdown(null);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -46,26 +56,6 @@ export default function InvoiceTable() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    if (selectedInvoice) {
-      const previous = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = previous || "";
-      };
-    }
-  }, [selectedInvoice]);
-
-  const handleViewInvoice = (invoice) => {
-    setSelectedInvoice(invoice);
-    setOpenDropdown(null);
-  };
-
-  const handleDeleteInvoice = (invoice) => {
-    alert(`Deleted ${invoice.id}`);
-    setOpenDropdown(null);
-  };
 
   return (
     <div className="invoice-table-container">
@@ -85,7 +75,7 @@ export default function InvoiceTable() {
           </thead>
           <tbody>
             {currentRows.map((invoice, i) => (
-              <tr key={invoice.id}>
+              <tr key={i}>
                 <td>{invoice.id}</td>
                 <td>{invoice.reference}</td>
                 <td>₹ {invoice.amount}</td>
@@ -98,23 +88,20 @@ export default function InvoiceTable() {
                   <button
                     className="dots-button"
                     onClick={() => toggleDropdown(i)}
-                    aria-label="options"
                   >
                     ⋮
                   </button>
                   {openDropdown === i && (
-                    <div className="dropdown-menu" role="menu">
+                    <div className="dropdown-menu">
                       <div
                         className="dropdown-item"
                         onClick={() => handleViewInvoice(invoice)}
-                        role="menuitem"
                       >
                         <LiaEyeSolid size={18} /> View Invoice
                       </div>
                       <div
                         className="dropdown-item"
                         onClick={() => handleDeleteInvoice(invoice)}
-                        role="menuitem"
                       >
                         <RiDeleteBin6Line size={18} /> Delete
                       </div>
@@ -126,6 +113,7 @@ export default function InvoiceTable() {
           </tbody>
         </table>
       </div>
+
       <div className="invoice-pagination">
         <button
           className="invoice-pagination-button"
@@ -147,28 +135,10 @@ export default function InvoiceTable() {
       </div>
 
       {selectedInvoice && (
-        <div
-          className="modal-overlay"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedInvoice(null);
-          }}
-        >
-          <div
-            className="modal-box"
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Invoice ${selectedInvoice.id}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="close-btn"
-              aria-label="Close invoice"
-              onClick={() => setSelectedInvoice(null)}
-            >
-              ✕
-            </button>
-
-            <ViewInvoice invoice={selectedInvoice} />
+        <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
+          <div className="invoice-modal-content" onClick={(e) => e.stopPropagation()}>
+            {/* Render the ViewInvoice component and pass selectedInvoice as prop */}
+            <ViewInvoice invoice={selectedInvoice} />            
           </div>
         </div>
       )}

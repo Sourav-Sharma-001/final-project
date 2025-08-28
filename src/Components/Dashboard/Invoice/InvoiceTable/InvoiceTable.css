@@ -33,10 +33,10 @@
 .invoice-table th,
 .invoice-table td {
   border: 1px solid #ddd;
-  padding: 0.5rem;
-  text-align: center;
+  padding: 0.5rem;           /* same as Table.css */
+  text-align: center;        /* center text like Table.css */
   font-size: 0.9rem;
-  word-wrap: break-word;
+  word-wrap: break-word;     /* allow text to wrap */
 }
 
 .invoice-table th {
@@ -88,13 +88,13 @@
 }
 
 .dropdown-item {
-  display: flex;        
-  align-items: center;  
-  gap: 0.5rem;        
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   white-space: nowrap;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
 
 .dropdown-item:hover {
@@ -114,7 +114,7 @@
   background-color: #242531;
   color: white;
   border: none;
-  padding: 0.25rem 0.6rem;
+  padding: 0.5rem;          /* same padding as Table.css pagination */
   border-radius: 0.25rem;
   font-size: 0.85rem;
   cursor: pointer;
@@ -131,49 +131,6 @@
   flex-grow: 1;
   text-align: center;
   font-weight: 500;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.modal-details p {
-  margin: 0.5rem 0;
-}
-
-.modal-actions {
-  margin-top: 1rem;
-  text-align: right;
-}
-
-.close-btn {
-  padding: 0.5rem 1rem;
-  background: #333;
-  color: white;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-.close-btn:hover {
-  background: #555;
 }
 
 .invoice-modal {
@@ -212,8 +169,8 @@
 .invoice-items th, 
 .invoice-items td {
   border: 1px solid #ccc;
-  padding: 6px;
-  text-align: center;
+  padding: 0.5rem;         /* updated to match Table.css */
+  text-align: center;      /* updated to match Table.css */
 }
 
 .close-modal {
