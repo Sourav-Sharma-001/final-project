@@ -1,0 +1,69 @@
+.statistic {
+  width: 100%;
+  height: 100%;
+}
+
+.statistic h2{
+  margin: 0;
+}
+
+.statistic-container{  
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.statistic-data{
+  background-color: #424457;
+  border-radius: 0.5rem;
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  place-self: center;
+  align-items: center;
+  height: 20%;
+}
+
+.statistic-total-revenue{
+  width: 31%;
+  height: 90%;
+  place-content: center;
+  border-radius: 0.5rem;   
+}
+
+.statistic-total-revenue-container{
+  width: 80%;
+  height: 80%;
+  place-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around; 
+}
+
+
+.statistic-graph-top-products-container{
+  background-color: #424457; 
+  border-radius: 0.5rem;
+  width: 95%;
+  height: 74%;
+  place-self: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.statistic-chart-container{
+  background-color: white;
+  width: 73%;
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+.statistic-top-products{
+  background-color: white;
+  width: 25%;
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
