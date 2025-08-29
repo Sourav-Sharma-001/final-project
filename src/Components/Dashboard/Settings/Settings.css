@@ -1,0 +1,27 @@
+.settings{
+  width: 100%;
+  height: 100%;
+}
+
+.settings-text {
+  width: 100%;
+  height: 7%;
+  color: white;
+  display: flex;
+  align-items: center; 
+  font-size: 1.5rem; 
+}
+
+.settings hr{
+  margin: 0;
+}
+
+.settings-text div{
+  margin-left: 1rem;
+}
+
+
+.settings-form-container{
+  width: 100%;
+  height: 93%;
+}
