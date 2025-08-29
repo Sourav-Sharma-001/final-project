@@ -60,7 +60,7 @@ export default function InvoiceTable() {
   return (
     <div className="invoice-table-container">
       <div className="invoice-table-heading">
-        <h3>Invoice List</h3>
+        <h2>Invoice List</h2>
       </div>
       <div className="invoice-table">
         <table>
