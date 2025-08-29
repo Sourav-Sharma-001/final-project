@@ -76,7 +76,7 @@
 .account-item {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  
 }
 
 .account-item label {
@@ -85,10 +85,101 @@
 }
 
 .status {
-  color: #4CAF50; /* Green color for verified status */
+  color: #4CAF50;
   font-weight: bold;
 }
 
 .verified {
   color: #4CAF50;
+}
+
+.account-list-section {
+  margin-top: 0;
+}
+
+.account-list-section label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #444;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.account-avatar {
+  width: 2rem;
+  height: 2rem;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.account-email {
+  flex-grow: 1;
+  font-size: 0.95rem;
+}
+
+.account-actions {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 1.5rem;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.delete-button {
+  border: none;
+  background: none;
+  color: #e74c3c;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.delete-button:hover {
+  text-decoration: underline;
+}
+
+.logout-btn-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logout-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 0.625rem 1.875rem;
+  font-size: 0.9375rem;
+  border: none;
+  border-radius: 0.625rem;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
 }

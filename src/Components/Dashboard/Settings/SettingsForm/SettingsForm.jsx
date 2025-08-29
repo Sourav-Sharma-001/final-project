@@ -3,14 +3,19 @@ import "./SettingsForm.css";
 
 export default function SettingsForm() {
   const [formData, setFormData] = useState({
-    firstName: "Sarthak",
-    lastName: "Pal",
-    email: "Sarthakpal08@gmail.com",
+    firstName: "Sourav",
+    lastName: "Sharma",
+    email: "sourav@gmail.com",
     password: "**********",
     confirmPassword: "**********",
   });
 
   const [activeTab, setActiveTab] = useState("profile");
+  const [accounts, setAccounts] = useState([
+    { email: "example1@gmail.com" },
+    { email: "example2@gmail.com" }
+  ]);
+  const [dropdownIndex, setDropdownIndex] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,6 +31,22 @@ export default function SettingsForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+  };
+
+  const toggleDropdown = (index) => {
+    setDropdownIndex(dropdownIndex === index ? null : index);
+  };
+
+  const handleDelete = (index) => {
+    const updated = [...accounts];
+    updated.splice(index, 1);
+    setAccounts(updated);
+    setDropdownIndex(null);
+  };
+
+  const handleLogout = () => {
+    console.log("Logging out...");
+    // Implement actual logout functionality here
   };
 
   return (
@@ -111,6 +132,38 @@ export default function SettingsForm() {
             <div className="account-item">
               <label>Identity Verification</label>
               <p className="status verified">Verified</p>
+            </div>
+            <div className="account-list-section">
+              <label>Add Accounts</label>
+              {accounts.map((account, index) => (
+                <div className="account-row" key={index}>
+                  <div className="account-avatar" />
+                  <div className="account-email">{account.email}</div>
+                  <div className="account-actions">
+                    <button
+                      className="dropdown-toggle"
+                      onClick={() => toggleDropdown(index)}
+                    >
+                      &#x25BC;
+                    </button>
+                    {dropdownIndex === index && (
+                      <div className="dropdown-menu">
+                        <button
+                          className="delete-button"
+                          onClick={() => handleDelete(index)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="logout-btn-container">
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           </div>
         )}
