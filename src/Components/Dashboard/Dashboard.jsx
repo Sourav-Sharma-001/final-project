@@ -1,7 +1,7 @@
 import React from "react";
-import "./Dashboard.css";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar/Sidebar";
-import Settings from "./Settings/Settings";
+import "./Dashboard.css";
 
 export default function Dashboard() {
   return (
@@ -10,7 +10,7 @@ export default function Dashboard() {
         <Sidebar />
       </div>
       <div className="pages-container">
-        <Settings />
+        <Outlet /> {/* Render the child route here */}
       </div>
     </div>
   );
