@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "./Table.css";
-import Multiple from './Multiple/Multiple';
+import Multiple from "./Multiple/Multiple";
 
 export default function Table() {
   const [showModal, setShowModal] = useState(false);
@@ -25,7 +25,7 @@ export default function Table() {
     qty: Math.floor(Math.random() * 50),
     threshold: 5 + (i % 10),
     expiry: "2025-12-31",
-    status: i % 2 === 0 ? "In Stock" : "Low Stock"
+    status: i % 2 === 0 ? "In Stock" : "Low Stock",
   }));
 
   const totalPages = Math.ceil(products.length / rowsPerPage);
@@ -37,13 +37,13 @@ export default function Table() {
   };
 
   return (
-    <div className='table-container'>
-      <div className='table-heading'>
+    <div className="table-container">
+      <div className="table-heading">
         <h3>Products</h3>
         <button onClick={openModal}>Add Product</button>
       </div>
 
-      <div className='table'>
+      <div className="table">
         <table>
           <thead>
             <tr>
@@ -89,7 +89,7 @@ export default function Table() {
       <div className="pagination">
         <button
           className="pagination-button"
-          onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
@@ -101,7 +101,7 @@ export default function Table() {
 
         <button
           className="pagination-button"
-          onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
           Next
@@ -110,7 +110,7 @@ export default function Table() {
 
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <button className="modal-button">Individual Product</button>
             <button className="modal-button" onClick={openMultiple}>
               Multiple Product

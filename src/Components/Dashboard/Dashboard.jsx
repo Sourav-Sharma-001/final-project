@@ -1,7 +1,11 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar/Sidebar";
 import "./Dashboard.css";
+import Sidebar from "./Sidebar/Sidebar";
+import Home from "./Home/Home"
+import Product from "./Product/Product"
+import Invoice from "./Invoice/Invoice"
+import Statistic from "./Statistic/Statistic"
+import Settings from "./Settings/Settings";
 
 export default function Dashboard() {
   return (
@@ -10,7 +14,8 @@ export default function Dashboard() {
         <Sidebar />
       </div>
       <div className="pages-container">
-        <Outlet /> {/* Render the child route here */}
+        <Home />
+        
       </div>
     </div>
   );

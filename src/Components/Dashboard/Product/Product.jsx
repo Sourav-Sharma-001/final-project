@@ -4,14 +4,13 @@ import OverallInventory from "./OverallInventory/OverallInventory";
 import Navbar from "../Navbar/Navbar";
 import Table from "./Table/Table";
 
-
 export default function Product() {
   return (
     <div className="product">
-      <Navbar/>
+      <Navbar />
       <div className="product-content-container">
         <OverallInventory />
-        <Table/>       
+        <Table />
       </div>
     </div>
   );
