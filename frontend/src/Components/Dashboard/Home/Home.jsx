@@ -9,7 +9,6 @@ import Chart from "./Chart/Chart";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
-  // Manage order of two blocks: overview and graph
   const [blocks, setBlocks] = useState([
     { id: "overview" },
     { id: "graph" },
