@@ -9,10 +9,7 @@ import Chart from "./Chart/Chart";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
-  const [blocks, setBlocks] = useState([
-    { id: "overview" },
-    { id: "graph" },
-  ]);
+  const [blocks, setBlocks] = useState([{ id: "overview" }, { id: "graph" }]);
 
   const handleDragStart = (e, dragIndex) => {
     e.dataTransfer.setData("dragIndex", dragIndex);
@@ -48,7 +45,7 @@ export default function Home() {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, index)}
                 >
-                  <div className="overview-block">
+                  <div className="draggable-unit-1">
                     <SalesOverview />
                     <PurchaseOverview />
                   </div>
@@ -76,9 +73,13 @@ export default function Home() {
         </div>
 
         <div className="right-home-container">
-          <InventorySummary />
-          <PurchaseSummary />
-          <TopProducts />
+          <div className="draggable-unit-2-upper">
+            <InventorySummary />
+            <PurchaseSummary />
+          </div>
+          <div className="draggable-unit-2-lower">
+            <TopProducts />
+          </div>
         </div>
       </div>
     </div>

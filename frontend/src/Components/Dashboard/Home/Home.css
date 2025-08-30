@@ -38,7 +38,7 @@
   width: 100%;
 }
 
-.overview-block {
+.draggable-unit-1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -71,5 +71,16 @@
   margin: 0;
   font-size: 0.9rem;
   color: #555;
+}
+
+.draggable-unit-2-upper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 33vh;
+}
+
+.draggable-unit-2-lower{
+  height: 60%;
 }
 
