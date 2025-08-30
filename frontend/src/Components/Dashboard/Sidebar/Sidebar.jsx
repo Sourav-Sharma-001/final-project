@@ -1,13 +1,14 @@
 import React from 'react';
 import { FaHome, FaBox, FaFileInvoice, FaCog, FaChartBar, FaUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import logo from "../../../../../Images/frame.png"
 import "./Sidebar.css";
 
 export default function Sidebar() {
   return (
     <div className='sidebar'>
       <div className='sidebar-logo'>
-        <img src="/frame.png" alt="Logo" />
+        <img src={logo} alt="Logo" />
       </div>
       <hr />
       <div className='sidebar-pages'>
