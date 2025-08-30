@@ -9,41 +9,90 @@ import Chart from "./Chart/Chart";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
-  const [blocks, setBlocks] = useState([{ id: "overview" }, { id: "graph" }]);
+  // State for left draggable blocks
+  const [leftBlocks, setLeftBlocks] = useState([
+    { id: "overview" },
+    { id: "graph" },
+  ]);
 
-  const handleDragStart = (e, dragIndex) => {
+  // State for right draggable blocks
+  const [rightBlocks, setRightBlocks] = useState([
+    { id: "upper" },
+    { id: "lower" },
+  ]);
+
+  const [dragOverIndexLeft, setDragOverIndexLeft] = useState(null);
+  const [dragOverIndexRight, setDragOverIndexRight] = useState(null);
+
+  // Handlers for left blocks
+
+  const handleDragStartLeft = (e, dragIndex) => {
     e.dataTransfer.setData("dragIndex", dragIndex);
   };
 
-  const handleDrop = (e, dropIndex) => {
-    const dragIndex = parseInt(e.dataTransfer.getData("dragIndex"), 10);
-    if (dragIndex === dropIndex) return;
-
-    const newOrder = [...blocks];
-    const [moved] = newOrder.splice(dragIndex, 1);
-    newOrder.splice(dropIndex, 0, moved);
-    setBlocks(newOrder);
+  const handleDragEnterLeft = (e, index) => {
+    setDragOverIndexLeft(index);
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOverLeft = (e) => {
     e.preventDefault();
+  };
+
+  const handleDropLeft = (e) => {
+    const dragIndex = parseInt(e.dataTransfer.getData("dragIndex"), 10);
+    if (dragIndex === dragOverIndexLeft || dragOverIndexLeft === null) return;
+
+    const newOrder = [...leftBlocks];
+    const [moved] = newOrder.splice(dragIndex, 1);
+    newOrder.splice(dragOverIndexLeft, 0, moved);
+
+    setLeftBlocks(newOrder);
+    setDragOverIndexLeft(null);
+  };
+
+  // Handlers for right blocks
+
+  const handleDragStartRight = (e, dragIndex) => {
+    e.dataTransfer.setData("dragIndexRight", dragIndex);
+  };
+
+  const handleDragEnterRight = (e, index) => {
+    setDragOverIndexRight(index);
+  };
+
+  const handleDragOverRight = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDropRight = (e) => {
+    const dragIndex = parseInt(e.dataTransfer.getData("dragIndexRight"), 10);
+    if (dragIndex === dragOverIndexRight || dragOverIndexRight === null) return;
+
+    const newOrder = [...rightBlocks];
+    const [moved] = newOrder.splice(dragIndex, 1);
+    newOrder.splice(dragOverIndexRight, 0, moved);
+
+    setRightBlocks(newOrder);
+    setDragOverIndexRight(null);
   };
 
   return (
     <div className="home">
       <Navbar />
       <div className="home-content-container">
+        {/* LEFT SIDE */}
         <div className="left-home-container">
-          {blocks.map((block, index) => {
+          {leftBlocks.map((block, index) => {
             if (block.id === "overview") {
               return (
                 <div
                   key="overview"
                   className="draggable-unit"
                   draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, index)}
+                  onDragStart={(e) => handleDragStartLeft(e, index)}
+                  onDragEnter={(e) => handleDragEnterLeft(e, index)}
+                  onDragOver={handleDragOverLeft}
+                  onDrop={handleDropLeft}
                 >
                   <div className="draggable-unit-1">
                     <SalesOverview />
@@ -59,9 +108,10 @@ export default function Home() {
                   key="graph"
                   className="draggable-unit graph"
                   draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, index)}
+                  onDragStart={(e) => handleDragStartLeft(e, index)}
+                  onDragEnter={(e) => handleDragEnterLeft(e, index)}
+                  onDragOver={handleDragOverLeft}
+                  onDrop={handleDropLeft}
                 >
                   <Chart />
                 </div>
@@ -72,14 +122,42 @@ export default function Home() {
           })}
         </div>
 
+        {/* RIGHT SIDE */}
         <div className="right-home-container">
-          <div className="draggable-unit-2-upper">
-            <InventorySummary />
-            <PurchaseSummary />
-          </div>
-          <div className="draggable-unit-2-lower">
-            <TopProducts />
-          </div>
+          {rightBlocks.map((block, index) => {
+            if (block.id === "upper") {
+              return (
+                <div
+                  key="upper"
+                  className="draggable-unit-2-upper"
+                  draggable
+                  onDragStart={(e) => handleDragStartRight(e, index)}
+                  onDragEnter={(e) => handleDragEnterRight(e, index)}
+                  onDragOver={handleDragOverRight}
+                  onDrop={handleDropRight}
+                >
+                  <InventorySummary />
+                  <PurchaseSummary />
+                </div>
+              );
+            }
+            if (block.id === "lower") {
+              return (
+                <div
+                  key="lower"
+                  className="draggable-unit-2-lower"
+                  draggable
+                  onDragStart={(e) => handleDragStartRight(e, index)}
+                  onDragEnter={(e) => handleDragEnterRight(e, index)}
+                  onDragOver={handleDragOverRight}
+                  onDrop={handleDropRight}
+                >
+                  <TopProducts />
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       </div>
     </div>
