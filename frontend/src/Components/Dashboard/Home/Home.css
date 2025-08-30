@@ -34,6 +34,26 @@
   border-radius: 1rem;
 }
 
+/* Draggable wrapper - only adds width to keep layout consistent */
+.draggable-unit {
+  width: 100%;
+}
+
+/* Wrap SalesOverview and PurchaseOverview to preserve original layout */
+.overview-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 33vh;
+}
+
+/* Optional: Visual feedback for dragging */
+.draggable-unit:active {
+  opacity: 0.8;
+  cursor: grabbing;
+}
+
+/* Your existing top-products styling */
 .top-products {
   width: 100%;
   height: 60%;

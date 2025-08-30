@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Home.css";
 import SalesOverview from "./SalesOverview/SalesOverview";
 import PurchaseOverview from "./PurchaseOverview/PurchaseOverview";
@@ -9,17 +9,73 @@ import Chart from "./Chart/Chart";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
+  // Manage order of two blocks: overview and graph
+  const [blocks, setBlocks] = useState([
+    { id: "overview" },
+    { id: "graph" },
+  ]);
+
+  const handleDragStart = (e, dragIndex) => {
+    e.dataTransfer.setData("dragIndex", dragIndex);
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    const dragIndex = parseInt(e.dataTransfer.getData("dragIndex"), 10);
+    if (dragIndex === dropIndex) return;
+
+    const newOrder = [...blocks];
+    const [moved] = newOrder.splice(dragIndex, 1);
+    newOrder.splice(dropIndex, 0, moved);
+    setBlocks(newOrder);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="home">
       <Navbar />
       <div className="home-content-container">
         <div className="left-home-container">
-          <SalesOverview />
-          <PurchaseOverview />
-          <div className="graph">
-            <Chart />
-          </div>
+          {blocks.map((block, index) => {
+            if (block.id === "overview") {
+              return (
+                <div
+                  key="overview"
+                  className="draggable-unit"
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, index)}
+                >
+                  <div className="overview-block">
+                    <SalesOverview />
+                    <PurchaseOverview />
+                  </div>
+                </div>
+              );
+            }
+
+            if (block.id === "graph") {
+              return (
+                <div
+                  key="graph"
+                  className="draggable-unit graph"
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, index)}
+                >
+                  <Chart />
+                </div>
+              );
+            }
+
+            return null;
+          })}
         </div>
+
         <div className="right-home-container">
           <InventorySummary />
           <PurchaseSummary />
