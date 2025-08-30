@@ -1,5 +1,4 @@
 import React from "react";
-import "./Dashboard.css";
 import Sidebar from "./Sidebar/Sidebar";
 import Home from "./Home/Home";
 import Product from "./Product/Product";
@@ -7,6 +6,7 @@ import Invoice from "./Invoice/Invoice";
 import Statistic from "./Statistic/Statistic";
 import Settings from "./Settings/Settings";
 import { Routes, Route } from "react-router-dom";
+import "./Dashboard.css";
 
 export default function Dashboard() {
   return (
@@ -14,7 +14,7 @@ export default function Dashboard() {
       <div className="sidebar-container">
         <Sidebar />
       </div>
-      <div className="pages-container">
+      <div className="pages-container">        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />

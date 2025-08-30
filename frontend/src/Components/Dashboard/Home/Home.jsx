@@ -9,13 +9,11 @@ import Chart from "./Chart/Chart";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
-  // State for left draggable blocks
   const [leftBlocks, setLeftBlocks] = useState([
     { id: "overview" },
     { id: "graph" },
   ]);
 
-  // State for right draggable blocks
   const [rightBlocks, setRightBlocks] = useState([
     { id: "upper" },
     { id: "lower" },
@@ -23,8 +21,6 @@ export default function Home() {
 
   const [dragOverIndexLeft, setDragOverIndexLeft] = useState(null);
   const [dragOverIndexRight, setDragOverIndexRight] = useState(null);
-
-  // Handlers for left blocks
 
   const handleDragStartLeft = (e, dragIndex) => {
     e.dataTransfer.setData("dragIndex", dragIndex);
@@ -49,8 +45,6 @@ export default function Home() {
     setLeftBlocks(newOrder);
     setDragOverIndexLeft(null);
   };
-
-  // Handlers for right blocks
 
   const handleDragStartRight = (e, dragIndex) => {
     e.dataTransfer.setData("dragIndexRight", dragIndex);
@@ -80,7 +74,6 @@ export default function Home() {
     <div className="home">
       <Navbar />
       <div className="home-content-container">
-        {/* LEFT SIDE */}
         <div className="left-home-container">
           {leftBlocks.map((block, index) => {
             if (block.id === "overview") {
@@ -122,7 +115,6 @@ export default function Home() {
           })}
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="right-home-container">
           {rightBlocks.map((block, index) => {
             if (block.id === "upper") {
