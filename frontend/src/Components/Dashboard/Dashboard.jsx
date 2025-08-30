@@ -7,6 +7,7 @@ import Statistic from "./Statistic/Statistic";
 import Settings from "./Settings/Settings";
 import { Routes, Route } from "react-router-dom";
 import "./Dashboard.css";
+import Individual from "./Product/Table/Individual/Individual";
 
 export default function Dashboard() {
   return (
@@ -18,6 +19,7 @@ export default function Dashboard() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/product/individual" element={<Individual />} />
           <Route path="/invoice" element={<Invoice />} />
           <Route path="/statistics" element={<Statistic />} />
           <Route path="/settings" element={<Settings />} />

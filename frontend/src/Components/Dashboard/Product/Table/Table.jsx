@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Table.css";
 import Multiple from "./Multiple/Multiple";
 
@@ -8,6 +9,7 @@ export default function Table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
   const rowsPerPage = 9;
+  const navigate = useNavigate();
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -18,6 +20,11 @@ export default function Table() {
   };
 
   const closeMultiple = () => setShowMultiple(false);
+
+  const goToIndividual = () => {
+    setShowModal(false);
+    navigate("/product/individual");
+  };
 
   const products = Array.from({ length: 40 }).map((_, i) => ({
     name: `Product ${i + 1}`,
@@ -111,7 +118,9 @@ export default function Table() {
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-button">Individual Product</button>
+            <button className="modal-button" onClick={goToIndividual}>
+              Individual Product
+            </button>
             <button className="modal-button" onClick={openMultiple}>
               Multiple Product
             </button>
