@@ -7,7 +7,7 @@ export default function Table() {
   const [showMultiple, setShowMultiple] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const rowsPerPage = 7;
+  const rowsPerPage = 9;
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -39,7 +39,7 @@ export default function Table() {
   return (
     <div className="table-container">
       <div className="table-heading">
-        <h3>Products</h3>
+        <h2>Products</h2>
         <button onClick={openModal}>Add Product</button>
       </div>
 

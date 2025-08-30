@@ -33,11 +33,11 @@
 
 .invoice-table th,
 .invoice-table td {
-  border: 1px solid #ddd;
-  padding: 0.5rem;           /* same as Table.css */
-  text-align: center;        /* center text like Table.css */
+  border: 0.0625rem solid #ddd; /* 1px = 0.0625rem */
+  padding: 0.5rem;           
+  text-align: center;       
   font-size: 0.9rem;
-  word-wrap: break-word;     /* allow text to wrap */
+  word-wrap: break-word;    
 }
 
 .invoice-table th {
@@ -66,7 +66,7 @@
 
 .dots-button {
   position: absolute;
-  right: 0.3rem;
+  right: 0.1875rem; /* 3px */
   background: none;
   border: none;
   cursor: pointer;
@@ -80,7 +80,7 @@
   right: 0;
   top: 1.5rem;
   background: white;
-  border: 1px solid #ddd;
+  border: 0.0625rem solid #ddd;
   border-radius: 0.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
   z-index: 10;
@@ -115,11 +115,11 @@
   background-color: #242531;
   color: white;
   border: none;
-  padding: 0.5rem;          /* same padding as Table.css pagination */
+  padding: 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.85rem;
   cursor: pointer;
-  min-width: 60px;
+  min-width: 3.75rem; /* 60px */
   text-align: center;
 }
 
@@ -147,40 +147,40 @@
 
 .invoice-modal-content {
   background: #fff;
-  padding: 20px;
-  width: 500px;
+  padding: 1.25rem; /* 20px */
+  width: 31.25rem;  /* 500px */
   max-height: 90vh;
   overflow-y: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-radius: 0.5rem; /* 8px */
+  box-shadow: 0 0.25rem 0.9375rem rgba(0,0,0,0.3); /* 4px 15px */
 }
 
 .invoice-modal-content h2, 
 .invoice-modal-content h3 {
-  margin: 5px 0;
+  margin: 0.3125rem 0; /* 5px */
   text-align: center;
 }
 
 .invoice-items {
   width: 100%;
   border-collapse: collapse;
-  margin: 10px 0;
+  margin: 0.625rem 0; /* 10px */
 }
 
 .invoice-items th, 
 .invoice-items td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;         /* updated to match Table.css */
-  text-align: center;      /* updated to match Table.css */
+  border: 0.0625rem solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 .close-modal {
   display: block;
-  margin: 10px auto 0;
-  padding: 8px 15px;
+  margin: 0.625rem auto 0; /* 10px */
+  padding: 0.5rem 0.9375rem; /* 8px 15px */
   background: crimson;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.25rem; /* 4px */
   cursor: pointer;
 }
