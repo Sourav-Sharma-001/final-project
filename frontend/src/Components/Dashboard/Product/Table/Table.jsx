@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Table.css";
@@ -9,18 +9,23 @@ export default function Table() {
   const [showMultiple, setShowMultiple] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [products, setProducts] = useState([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
   const rowsPerPage = 9;
   const navigate = useNavigate();
+
+  const dropdownRefs = useRef({});
 
   useEffect(() => {
     fetchProducts();
   }, [refreshFlag]);
 
   useEffect(() => {
-    const handleClickOutside = () => setOpenDropdown(null);
+    const handleClickOutside = (event) => {
+      if (!Object.values(dropdownRefs.current).some(ref => ref && ref.contains(event.target))) {
+        setOpenDropdown(null);
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -39,20 +44,7 @@ export default function Table() {
   const openMultiple = () => { setShowModal(false); setShowMultiple(true); };
   const closeMultiple = () => { setShowMultiple(false); setRefreshFlag(f => !f); };
   const goToIndividual = () => { setShowModal(false); navigate("/product/individual"); };
-
-  const toggleDropdown = (index, event) => {
-    if (openDropdown === index) {
-      setOpenDropdown(null);
-    } else {
-      const rect = event.target.getBoundingClientRect();
-      const dropdownHeight = 70;
-      const viewportHeight = window.innerHeight;
-      const top = rect.bottom + dropdownHeight > viewportHeight ? rect.top - dropdownHeight : rect.bottom;
-      const left = rect.right - 150;
-      setDropdownPosition({ top: top + window.scrollY, left: left + window.scrollX });
-      setOpenDropdown(index);
-    }
-  };
+  const toggleDropdown = (index) => { setOpenDropdown(openDropdown === index ? null : index); };
 
   const handleEdit = (id) => {
     navigate(`/product/individual/${id}`);
@@ -110,19 +102,13 @@ export default function Table() {
                   <td>{product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "N/A"}</td>
                   <td className={`availability-cell ${availability.className}`}>
                     <span className="availability-text">{availability.text}</span>
-                    <div className="dropdown-wrapper">
-                      <button className="dots-button" onClick={(e) => toggleDropdown(i, e)}>⋮</button>
+                    <div
+                      className="dropdown-wrapper"
+                      ref={el => dropdownRefs.current[i] = el}
+                    >
+                      <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
                       {openDropdown === i && (
-                        <div
-                          className="dropdown-menu"
-                          style={{
-                            position: "fixed",
-                            top: dropdownPosition.top,
-                            left: dropdownPosition.left,
-                            zIndex: 1001,
-                            width: "4rem"
-                          }}
-                        >
+                        <div className="dropdown-menu">
                           <div className="dropdown-item" onClick={() => handleEdit(product._id)}>Edit</div>
                           <div className="dropdown-item" onClick={() => handleDelete(product._id)}>Delete</div>
                         </div>
