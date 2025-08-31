@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Multiple.css";
 import { FaFileCsv } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 export default function Multiple({ onClose }) {
   const [file, setFile] = useState(null);
@@ -55,13 +56,13 @@ export default function Multiple({ onClose }) {
       });
       const data = await res.json();
       if (res.ok) {
-        alert(data.message);
+        toast.success(data.message);
         onClose();
       } else {
-        setError(data.error || "Upload failed");
+        toast.error(data.error || "Upload failed");
       }
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setUploading(false);
     }
@@ -73,9 +74,7 @@ export default function Multiple({ onClose }) {
         <h3>Upload CSV File</h3>
 
         <div
-          className={`drag-drop-zone ${isDragging ? "dragging" : ""} ${
-            step === 2 ? "readonly" : ""
-          }`}
+          className={`drag-drop-zone ${isDragging ? "dragging" : ""} ${step === 2 ? "readonly" : ""}`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -118,19 +117,11 @@ export default function Multiple({ onClose }) {
           </button>
 
           {step === 1 ? (
-            <button
-              className="upload-button"
-              onClick={handleNext}
-              disabled={!file || error || uploading}
-            >
+            <button className="upload-button" onClick={handleNext} disabled={!file || error || uploading}>
               Next
             </button>
           ) : (
-            <button
-              className="upload-button"
-              onClick={handleUpload}
-              disabled={uploading}
-            >
+            <button className="upload-button" onClick={handleUpload} disabled={uploading}>
               {uploading ? "Uploading..." : "Upload"}
             </button>
           )}

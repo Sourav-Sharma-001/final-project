@@ -53,14 +53,14 @@ export default function Individual() {
     try {
       if (id) {
         await axios.put(`http://localhost:5000/api/products/${id}`, productData);
-        toast.success("✅ Product updated successfully!");
+        toast.success("Product updated successfully!");
       } else {
         await axios.post("http://localhost:5000/api/products", productData);
-        toast.success("✅ Product added successfully!");
+        toast.success("Product added successfully!");
       }
       navigate("/product");
     } catch (err) {
-      toast.error("❌ " + (err.response?.data?.error || err.message));
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
