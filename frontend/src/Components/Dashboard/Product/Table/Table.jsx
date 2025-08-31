@@ -48,6 +48,12 @@ export default function Table() {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  const getAvailability = (quantity, threshold) => {
+    if (quantity === 0) return { text: "Out of Stock", className: "out-of-stock" };
+    if (quantity <= threshold) return { text: "Low Stock", className: "low-stock" };
+    return { text: "In Stock", className: "in-stock" };
+  };
+
   return (
     <div className="table-container">
       <div className="table-heading">
@@ -68,40 +74,39 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {currentRows.map((product, i) => (
-              <tr key={product._id}>
-                <td>{product.productName}</td>
-                <td>₹ {product.price}</td>
-                <td>{product.quantity}</td>
-                <td>{product.threshold}</td>
-                <td>
-                  {product.expiryDate
-                    ? new Date(product.expiryDate).toLocaleDateString()
-                    : "N/A"}
-                </td>
-                <td className="availability-cell">
-                  <span className="availability-text">
-                    {product.quantity <= product.threshold
-                      ? "Low Stock"
-                      : "In Stock"}
-                  </span>
-                  <div className="dropdown-wrapper">
-                    <button
-                      className="dots-button"
-                      onClick={() => toggleDropdown(i)}
-                    >
-                      ⋮
-                    </button>
-                    {openDropdown === i && (
-                      <div className="dropdown-menu">
-                        <div className="dropdown-item">Edit</div>
-                        <div className="dropdown-item">Delete</div>
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {currentRows.map((product, i) => {
+              const availability = getAvailability(product.quantity, product.threshold);
+              return (
+                <tr key={product._id}>
+                  <td>{product.productName}</td>
+                  <td>₹ {product.price}</td>
+                  <td>{product.quantity}</td>
+                  <td>{product.threshold}</td>
+                  <td>
+                    {product.expiryDate
+                      ? new Date(product.expiryDate).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                  <td className={`availability-cell ${availability.className}`}>
+                    <span className="availability-text">{availability.text}</span>
+                    <div className="dropdown-wrapper">
+                      <button
+                        className="dots-button"
+                        onClick={() => toggleDropdown(i)}
+                      >
+                        ⋮
+                      </button>
+                      {openDropdown === i && (
+                        <div className="dropdown-menu">
+                          <div className="dropdown-item">Edit</div>
+                          <div className="dropdown-item">Delete</div>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

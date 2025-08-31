@@ -22,7 +22,7 @@
 .table-heading button {
   background-color: #242531;
   color: white;
-  border-radius: 0.25rem; /* same as invoice */
+  border-radius: 0.25rem; 
   padding: 0.5rem;
   cursor: pointer;
   border: none;
@@ -42,7 +42,7 @@
 
 .table th,
 .table td {
-  border: 0.0625rem solid #ddd; /* 1px = 0.0625rem */
+  border: 0.0625rem solid #ddd; 
   padding: 0.5rem;
   text-align: center;
   font-size: 0.9rem;
@@ -50,7 +50,7 @@
 }
 
 .table th {
-  background-color: #f0f0f0; /* same as invoice */
+  background-color: #f0f0f0; 
 }
 
 .table tr:nth-child(even) {
@@ -135,7 +135,7 @@
   border-radius: 0.25rem;
   font-size: 0.85rem;
   cursor: pointer;
-  min-width: 3.75rem; /* 60px */
+  min-width: 3.75rem; 
   text-align: center;
 }
 
@@ -150,7 +150,6 @@
   font-weight: 500;
 }
 
-/* Modal for add product (unique to Table) */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -166,7 +165,7 @@
   background-color: white;
   padding: 1.25rem;
   border-radius: 0.5rem;
-  width: 31.25rem; /* match invoice modal width */
+  width: 31.25rem; 
   height: 12rem;
   display: flex;
   flex-direction: column;
@@ -183,4 +182,19 @@
   color: white;
   cursor: pointer;
   width: 65%;
+}
+
+.availability-cell.in-stock .availability-text {
+  color: green;
+  font-weight: 600;
+}
+
+.availability-cell.low-stock .availability-text {
+  color: orange;
+  font-weight: 600;
+}
+
+.availability-cell.out-of-stock .availability-text {
+  color: red;
+  font-weight: 600;
 }
