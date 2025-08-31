@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import ViewInvoice from "./ViewInvoice/ViewInvoice"; // import your component
+import ViewInvoice from "./ViewInvoice/ViewInvoice";
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,16 +25,14 @@ export default function InvoiceTable() {
     ],
   }));
 
-  const totalPages = Math.ceil(invoices.length / rowsPerPage);
+  const totalPages = Math.max(Math.ceil(invoices.length / rowsPerPage), 1);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentRows = invoices.slice(startIndex, startIndex + rowsPerPage);
 
-  const toggleDropdown = (index) => {
-    setOpenDropdown(openDropdown === index ? null : index);
-  };
+  const toggleDropdown = (index) => setOpenDropdown(openDropdown === index ? null : index);
 
   const handleViewInvoice = (invoice) => {
-    setSelectedInvoice(invoice); // set invoice to pass to ViewInvoice
+    setSelectedInvoice(invoice);
     setOpenDropdown(null);
   };
 
@@ -45,11 +43,7 @@ export default function InvoiceTable() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRefs.current.every(
-          (ref) => ref && !ref.contains(event.target)
-        )
-      ) {
+      if (dropdownRefs.current.every((ref) => ref && !ref.contains(event.target))) {
         setOpenDropdown(null);
       }
     };
@@ -62,6 +56,7 @@ export default function InvoiceTable() {
       <div className="invoice-table-heading">
         <h2>Invoice List</h2>
       </div>
+
       <div className="invoice-table">
         <table>
           <thead>
@@ -85,24 +80,13 @@ export default function InvoiceTable() {
                   ref={(el) => (dropdownRefs.current[i] = el)}
                 >
                   <span>{invoice.dueDate}</span>
-                  <button
-                    className="dots-button"
-                    onClick={() => toggleDropdown(i)}
-                  >
-                    ⋮
-                  </button>
+                  <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
                   {openDropdown === i && (
                     <div className="dropdown-menu">
-                      <div
-                        className="dropdown-item"
-                        onClick={() => handleViewInvoice(invoice)}
-                      >
+                      <div className="dropdown-item" onClick={() => handleViewInvoice(invoice)}>
                         <LiaEyeSolid size={18} /> View Invoice
                       </div>
-                      <div
-                        className="dropdown-item"
-                        onClick={() => handleDeleteInvoice(invoice)}
-                      >
+                      <div className="dropdown-item" onClick={() => handleDeleteInvoice(invoice)}>
                         <RiDeleteBin6Line size={18} /> Delete
                       </div>
                     </div>
@@ -137,8 +121,7 @@ export default function InvoiceTable() {
       {selectedInvoice && (
         <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
           <div className="invoice-modal-content" onClick={(e) => e.stopPropagation()}>
-            {/* Render the ViewInvoice component and pass selectedInvoice as prop */}
-            <ViewInvoice invoice={selectedInvoice} />            
+            <ViewInvoice invoice={selectedInvoice} />
           </div>
         </div>
       )}
