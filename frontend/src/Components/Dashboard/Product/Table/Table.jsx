@@ -10,12 +10,13 @@ export default function Table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [products, setProducts] = useState([]);
+  const [refreshFlag, setRefreshFlag] = useState(false);
   const rowsPerPage = 9;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [refreshFlag]);
 
   const fetchProducts = async () => {
     try {
@@ -29,14 +30,14 @@ export default function Table() {
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
   const openMultiple = () => { setShowModal(false); setShowMultiple(true); };
-  const closeMultiple = () => setShowMultiple(false);
+  const closeMultiple = () => { setShowMultiple(false); setRefreshFlag(f => !f); };
   const goToIndividual = () => { setShowModal(false); navigate("/product/individual"); };
   const toggleDropdown = (index) => { setOpenDropdown(openDropdown === index ? null : index); };
   const handleEdit = (id) => navigate(`/product/individual/${id}`);
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/products/${id}`);
-      fetchProducts();
+      setRefreshFlag(f => !f);
     } catch (err) {
       console.error(err);
     }

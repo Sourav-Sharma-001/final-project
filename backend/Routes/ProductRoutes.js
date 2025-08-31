@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../Models/Product");
+const multer = require("multer");
+const csv = require("csv-parser");
+const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
+
+const upload = multer({ dest: "uploads/" });
 
 router.post("/", async (req, res) => {
   try {
@@ -10,6 +16,40 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+});
+
+router.post("/upload-csv", upload.single("file"), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+  const products = [];
+  fs.createReadStream(req.file.path)
+    .pipe(csv())
+    .on("data", (row) => {
+      products.push({
+        clientProductId: row.clientProductId,
+        autoProductId: uuidv4(),
+        productName: row.productName,
+        category: row.category,
+        price: Number(row.price),
+        quantity: Number(row.quantity),
+        unit: row.unit,
+        expiryDate: row.expiryDate ? new Date(row.expiryDate) : null,
+        threshold: Number(row.threshold),
+        image: row.image || "",
+      });
+    })
+    .on("end", async () => {
+      try {
+        await Product.insertMany(products);
+        fs.unlinkSync(req.file.path);
+        res.status(201).json({ message: "Products uploaded successfully" });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    })
+    .on("error", (err) => {
+      res.status(500).json({ error: err.message });
+    });
 });
 
 router.get("/", async (req, res) => {

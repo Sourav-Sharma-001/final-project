@@ -6,34 +6,64 @@ export default function Multiple({ onClose }) {
   const [file, setFile] = useState(null);
   const [step, setStep] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const validateFile = (f) => {
+    if (f && f.type !== "text/csv" && !f.name.endsWith(".csv")) {
+      setError("Only CSV files are allowed.");
+      return false;
+    }
+    setError("");
+    return true;
+  };
 
   const handleFileChange = (e) => {
-    if (step === 1) setFile(e.target.files[0]);
+    const f = e.target.files[0];
+    if (validateFile(f)) setFile(f);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    if (step === 1) setFile(e.dataTransfer.files[0]);
+    const f = e.dataTransfer.files[0];
+    if (validateFile(f)) setFile(f);
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    if (step === 1) setIsDragging(true);
+    setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleNext = () => {
     if (file) setStep(2);
   };
 
-  const handleUpload = () => {
-    if (file) {
-      console.log("Uploading:", file.name);
-      onClose();
+  const handleUpload = async () => {
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/products/upload-csv", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message);
+        onClose();
+      } else {
+        setError(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -43,7 +73,9 @@ export default function Multiple({ onClose }) {
         <h3>Upload CSV File</h3>
 
         <div
-          className={`drag-drop-zone ${isDragging ? "dragging" : ""} ${step === 2 ? "readonly" : ""}`}
+          className={`drag-drop-zone ${isDragging ? "dragging" : ""} ${
+            step === 2 ? "readonly" : ""
+          }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -55,18 +87,20 @@ export default function Multiple({ onClose }) {
               <p>Drag your CSV here</p>
               <p>or</p>
               <label htmlFor="file-upload" className="browse-link">
-               Browse
+                Browse
               </label>
               <input
                 id="file-upload"
                 type="file"
-                accept=".csv"
+                accept=".csv,text/csv"
                 onChange={handleFileChange}
                 hidden
               />
             </>
           )}
         </div>
+
+        {error && <p className="error-text">{error}</p>}
 
         {step === 2 && file && (
           <div className="file-preview">
@@ -79,7 +113,7 @@ export default function Multiple({ onClose }) {
         )}
 
         <div className="modal-actions">
-          <button className="cancel-button" onClick={onClose}>
+          <button className="cancel-button" onClick={onClose} disabled={uploading}>
             Cancel
           </button>
 
@@ -87,13 +121,17 @@ export default function Multiple({ onClose }) {
             <button
               className="upload-button"
               onClick={handleNext}
-              disabled={!file}
+              disabled={!file || error || uploading}
             >
               Next
             </button>
           ) : (
-            <button className="upload-button" onClick={handleUpload}>
-              Upload
+            <button
+              className="upload-button"
+              onClick={handleUpload}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload"}
             </button>
           )}
         </div>
