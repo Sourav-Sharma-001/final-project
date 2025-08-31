@@ -77,14 +77,16 @@ export default function Individual() {
           </div>
         </div>
         <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} accept="image/*" />
-        <div className="product-details"><label>Product Name:</label><input type="text" value={productName} onChange={(e) => setProductName(e.target.value)} required /></div>
-        <div className="product-details"><label>Product ID:</label><input type="text" value={clientProductId} onChange={(e) => setClientProductId(e.target.value)} required /></div>
-        <div className="product-details"><label>Category:</label><input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required /></div>
-        <div className="product-details"><label>Price:</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required /></div>
-        <div className="product-details"><label>Quantity:</label><input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} required /></div>
-        <div className="product-details"><label>Unit:</label><input type="text" value={unit} onChange={(e) => setUnit(e.target.value)} required /></div>
-        <div className="product-details"><label>Expiry Date:</label><input type="date" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} required /></div>
-        <div className="product-details"><label>Threshold:</label><input type="number" value={threshold} onChange={(e) => setThreshold(e.target.value)} required /></div>
+
+        <div className="product-details"><label>Product Name:</label><input type="text" placeholder="Enter product name" value={productName} onChange={(e) => setProductName(e.target.value)} required /></div>
+        <div className="product-details"><label>Product ID:</label><input type="text" placeholder="Enter custom product ID" value={clientProductId} onChange={(e) => setClientProductId(e.target.value)} required /></div>
+        <div className="product-details"><label>Category:</label><input type="text" placeholder="Enter category" value={category} onChange={(e) => setCategory(e.target.value)} required /></div>
+        <div className="product-details"><label>Price:</label><input type="number" placeholder="Enter price" value={price} onChange={(e) => setPrice(e.target.value)} required /></div>
+        <div className="product-details"><label>Quantity:</label><input type="number" placeholder="Enter quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} required /></div>
+        <div className="product-details"><label>Unit:</label><input type="text" placeholder="Enter unit (e.g., kg, pcs)" value={unit} onChange={(e) => setUnit(e.target.value)} required /></div>
+        <div className="product-details"><label>Expiry Date:</label><input type="date" placeholder="Select expiry date" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} required /></div>
+        <div className="product-details"><label>Threshold:</label><input type="number" placeholder="Enter threshold value" value={threshold} onChange={(e) => setThreshold(e.target.value)} required /></div>
+
         <div className="buttons-wrapper">
           <button type="button" className="discard-btn" onClick={() => navigate("/product")}>Discard</button>
           <button type="submit" className="add-btn">{id ? "Update Product" : "Add Product"}</button>
