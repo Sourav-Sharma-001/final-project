@@ -30,7 +30,7 @@ export default function Individual() {
   const handleBrowseClick = () => fileInputRef.current.click();
 
   const handleAddProduct = async (e) => {
-    e.preventDefault(); // stops form reload
+    e.preventDefault(); 
     try {
       const newProduct = {
         clientProductId,
@@ -46,6 +46,7 @@ export default function Individual() {
 
       await axios.post("http://localhost:5000/api/products", newProduct);
       toast.success("✅ Product added successfully!");
+      navigate("/product");
     } catch (err) {
       toast.error("❌ " + (err.response?.data?.error || err.message));
     }

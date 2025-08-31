@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Table.css";
 import Multiple from "./Multiple/Multiple";
 
@@ -8,8 +9,21 @@ export default function Table() {
   const [showMultiple, setShowMultiple] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [products, setProducts] = useState([]);
   const rowsPerPage = 9;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products");
+        setProducts(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching products:", err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -25,15 +39,6 @@ export default function Table() {
     setShowModal(false);
     navigate("/product/individual");
   };
-
-  const products = Array.from({ length: 40 }).map((_, i) => ({
-    name: `Product ${i + 1}`,
-    price: 100 + i * 10,
-    qty: Math.floor(Math.random() * 50),
-    threshold: 5 + (i % 10),
-    expiry: "2025-12-31",
-    status: i % 2 === 0 ? "In Stock" : "Low Stock",
-  }));
 
   const totalPages = Math.ceil(products.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -64,14 +69,22 @@ export default function Table() {
           </thead>
           <tbody>
             {currentRows.map((product, i) => (
-              <tr key={i}>
-                <td>{product.name}</td>
+              <tr key={product._id}>
+                <td>{product.productName}</td>
                 <td>₹ {product.price}</td>
-                <td>{product.qty}</td>
+                <td>{product.quantity}</td>
                 <td>{product.threshold}</td>
-                <td>{product.expiry}</td>
+                <td>
+                  {product.expiryDate
+                    ? new Date(product.expiryDate).toLocaleDateString()
+                    : "N/A"}
+                </td>
                 <td className="availability-cell">
-                  <span className="availability-text">{product.status}</span>
+                  <span className="availability-text">
+                    {product.quantity <= product.threshold
+                      ? "Low Stock"
+                      : "In Stock"}
+                  </span>
                   <div className="dropdown-wrapper">
                     <button
                       className="dots-button"
