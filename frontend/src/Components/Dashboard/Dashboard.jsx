@@ -20,6 +20,7 @@ export default function Dashboard() {
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/individual" element={<Individual />} />
+          <Route path="/product/individual/:id" element={<Individual />} />
           <Route path="/invoice" element={<Invoice />} />
           <Route path="/statistics" element={<Statistic />} />
           <Route path="/settings" element={<Settings />} />

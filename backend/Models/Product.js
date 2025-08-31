@@ -5,12 +5,12 @@ const productSchema = new mongoose.Schema({
   clientProductId: { type: String, required: true, unique: true },
   autoProductId: { type: String, default: () => uuidv4(), unique: true },
   productName: { type: String, required: true },
-  category: { type: String, required: true },
+  category: { type: String },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
-  unit: { type: String, required: true },
-  expiryDate: { type: Date, required: true },
-  threshold: { type: Number, required: true },
+  unit: { type: String },
+  expiryDate: { type: Date },
+  threshold: { type: Number },
   image: { type: String }
 }, { timestamps: true });
 
