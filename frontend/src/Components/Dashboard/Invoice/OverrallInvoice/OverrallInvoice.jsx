@@ -12,7 +12,7 @@ export default function OverrallInvoice() {
   const [paidAmount, setPaidAmount] = useState(0);
   const [unpaidAmount, setUnpaidAmount] = useState(0);
   const [customersCount, setCustomersCount] = useState(0);
-  const { processed, refreshInvoices } = useContext(AppContext);
+  const { processed, setProcessed, refreshInvoices } = useContext(AppContext);
 
   const fetchProducts = async () => {
     try {
@@ -40,13 +40,20 @@ export default function OverrallInvoice() {
       const uniqueCustomers = new Set(data.map(p => p.customerName || p.clientProductId));
       setCustomersCount(uniqueCustomers.size);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error(err);
     }
   };
 
   useEffect(() => {
     fetchProducts();
   }, [refreshInvoices]);
+
+  useEffect(() => {
+    const storedProcessed = parseInt(localStorage.getItem("processed") || "0");
+    if (processed === undefined || processed === null) {
+      setProcessed(storedProcessed);
+    }
+  }, []);
 
   return (
     <div className="overall-invoice">
@@ -80,7 +87,7 @@ export default function OverrallInvoice() {
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Paid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
-            ₹ {paidAmount.toFixed(2)}
+              ₹ {paidAmount.toFixed(2)}
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
               {paidCount}
@@ -96,7 +103,7 @@ export default function OverrallInvoice() {
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Unpaid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
-            ₹ {unpaidAmount.toFixed(2)}
+              ₹ {unpaidAmount.toFixed(2)}
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
               {unpaidCount}

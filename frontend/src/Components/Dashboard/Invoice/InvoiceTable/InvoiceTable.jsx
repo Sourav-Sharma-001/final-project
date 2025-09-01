@@ -219,16 +219,20 @@ export default function InvoiceTable({ searchTerm }) {
         </div>
       )}
 
-      {selectedInvoice && (
-        <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
-          <div
-            className="invoice-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ViewInvoice invoice={selectedInvoice} />
-          </div>
-        </div>
-      )}
+{selectedInvoice && (
+  <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
+    <div
+      className="invoice-modal-content"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <ViewInvoice 
+        invoice={selectedInvoice} 
+        onClose={() => setSelectedInvoice(null)} 
+      />
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

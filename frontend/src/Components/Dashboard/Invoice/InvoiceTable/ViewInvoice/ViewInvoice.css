@@ -10,6 +10,8 @@
   border: 0.05rem solid #eee;
   box-sizing: border-box;
   font-size: 0.875rem;
+  overflow: visible;
+  z-index: 1;
 }
 
 .view-invoice-close-cross {
@@ -129,4 +131,47 @@
     justify-content: space-around;
     padding: 0.3rem 0;
   }
+}
+
+.view-invoice-buttons {
+  position: fixed;
+  top: 2rem;
+  right: 28rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 9999;
+}
+
+.view-invoice-close,
+.view-invoice-print,
+.view-invoice-download {
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.view-invoice-close {
+  background-color: #f00;
+  color: #fff;
+}
+
+.view-invoice-print {
+  background-color: #1890ff;
+  color: #fff;
+}
+
+.view-invoice-download {
+  background-color: #52c41a;
+  color: #fff;
 }
