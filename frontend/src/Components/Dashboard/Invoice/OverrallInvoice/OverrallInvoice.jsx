@@ -24,23 +24,19 @@ export default function OverrallInvoice() {
       const last7Days = new Date();
       last7Days.setDate(now.getDate() - 7);
 
-      // Recent transactions
       const recent = data.filter(p => new Date(p.createdAt) >= last7Days);
       setRecentTransactions(recent.length);
 
       setTotalInvoices(data.length);
 
-      // Paid invoices
       const paidProducts = data.filter(p => p.status === "Paid");
       setPaidCount(paidProducts.length);
       setPaidAmount(paidProducts.reduce((acc, p) => acc + (p.price || 0), 0));
 
-      // Unpaid invoices
       const unpaidProducts = data.filter(p => p.status !== "Paid");
       setUnpaidCount(unpaidProducts.length);
       setUnpaidAmount(unpaidProducts.reduce((acc, p) => acc + (p.price || 0), 0));
 
-      // Unique customers
       const uniqueCustomers = new Set(data.map(p => p.customerName || p.clientProductId));
       setCustomersCount(uniqueCustomers.size);
     } catch (err) {
@@ -56,7 +52,6 @@ export default function OverrallInvoice() {
     <div className="overall-invoice">
       <h3 id="product-h3">Overall Invoice</h3>
       <div style={{ display: "flex" }}>
-        {/* Recent Transactions */}
         <div className="invoice-block">
           <h4 id="product-h4">Recent Transactions</h4>
           <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
@@ -65,7 +60,6 @@ export default function OverrallInvoice() {
           <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Last 7 days</div>
         </div>
 
-        {/* Total Invoices */}
         <div className="invoice-block">
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Total Invoices</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -82,7 +76,6 @@ export default function OverrallInvoice() {
           </div>
         </div>
 
-        {/* Paid Amount */}
         <div className="invoice-block">
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Paid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -99,7 +92,6 @@ export default function OverrallInvoice() {
           </div>
         </div>
 
-        {/* Unpaid Amount */}
         <div className="invoice-block" style={{ border: "none" }}>
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Unpaid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>

@@ -6,7 +6,7 @@ import ViewInvoice from "./ViewInvoice/ViewInvoice";
 import axios from "axios";
 import { AppContext } from "../../../ContextAPI/ContextAPI";
 
-export default function InvoiceTable() {
+export default function InvoiceTable({ searchTerm }) { // searchTerm from parent
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -33,6 +33,17 @@ export default function InvoiceTable() {
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
+
+  const filteredProducts = products.filter(invoice => {
+    const term = searchTerm.toLowerCase();
+    return (
+      invoice.clientProductId?.toLowerCase().includes(term) ||
+      invoice.productName?.toLowerCase().includes(term) ||
+      invoice.referenceNumber?.toLowerCase().includes(term) ||
+      invoice.status?.toLowerCase().includes(term) 
+    );
+  });
+  
 
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);
@@ -63,7 +74,7 @@ export default function InvoiceTable() {
         prev.map((p) => (p._id === res.data._id ? res.data : p))
       );
       setDotOptions(null);
-      triggerRefresh(); // optional: refresh OverallInvoice immediately
+      triggerRefresh(); 
     } catch (err) {
       console.error(err);
     }
@@ -87,7 +98,7 @@ export default function InvoiceTable() {
             </tr>
           </thead>
           <tbody>
-            {products.map((invoice, i) => (
+            {filteredProducts.map((invoice, i) => (
               <tr
                 key={i}
                 onClick={(e) =>
