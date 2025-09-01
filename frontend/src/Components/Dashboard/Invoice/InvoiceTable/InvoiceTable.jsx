@@ -63,6 +63,7 @@ export default function InvoiceTable() {
         prev.map((p) => (p._id === res.data._id ? res.data : p))
       );
       setDotOptions(null);
+      triggerRefresh(); // optional: refresh OverallInvoice immediately
     } catch (err) {
       console.error(err);
     }
@@ -73,6 +74,7 @@ export default function InvoiceTable() {
       <div className="invoice-table-heading">
         <h2>Invoice List</h2>
       </div>
+
       <div className="invoice-table">
         <table>
           <thead>
@@ -193,7 +195,7 @@ export default function InvoiceTable() {
                     dotOptions.invoice.status === "Paid"
                       ? "default"
                       : "pointer",
-                  fontSize: "1rem", 
+                  fontSize: "1rem",
                 }}
               >
                 Paid
