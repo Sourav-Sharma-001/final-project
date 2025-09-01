@@ -13,6 +13,7 @@ export default function InvoiceTable({ searchTerm }) {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [rowOptions, setRowOptions] = useState(null);
   const [dotOptions, setDotOptions] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
   const rowsPerPage = 9;
   const { incrementProcessed, triggerRefresh } = useContext(AppContext);
 
@@ -34,7 +35,7 @@ export default function InvoiceTable({ searchTerm }) {
     fetchProducts();
   }, [currentPage]);
 
-  const filteredProducts = products.filter(invoice => {
+  const filteredProducts = products.filter((invoice) => {
     const term = searchTerm.toLowerCase();
     const dueDate = invoice.expiryDate
       ? new Date(invoice.expiryDate).toISOString().split("T")[0]
@@ -56,12 +57,18 @@ export default function InvoiceTable({ searchTerm }) {
   };
 
   const handleDeleteInvoice = async (invoice) => {
+    setDeleteConfirm({ invoice });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${invoice._id}`);
+      await axios.delete(`http://localhost:5000/api/products/${deleteConfirm.invoice._id}`);
       fetchProducts();
+      triggerRefresh();
+      setDeleteConfirm(null);
       setRowOptions(null);
       setDotOptions(null);
-      triggerRefresh();
     } catch (err) {
       console.error(err);
     }
@@ -77,7 +84,7 @@ export default function InvoiceTable({ searchTerm }) {
         prev.map((p) => (p._id === res.data._id ? res.data : p))
       );
       setDotOptions(null);
-      triggerRefresh(); 
+      triggerRefresh();
     } catch (err) {
       console.error(err);
     }
@@ -219,20 +226,68 @@ export default function InvoiceTable({ searchTerm }) {
         </div>
       )}
 
-{selectedInvoice && (
-  <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
-    <div
-      className="invoice-modal-content"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <ViewInvoice 
-        invoice={selectedInvoice} 
-        onClose={() => setSelectedInvoice(null)} 
-      />
-    </div>
-  </div>
-)}
+      {selectedInvoice && (
+        <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
+          <div
+            className="invoice-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ViewInvoice
+              invoice={selectedInvoice}
+              onClose={() => setSelectedInvoice(null)}
+            />
+          </div>
+        </div>
+      )}
 
+      {deleteConfirm && (
+        <div
+          className="delete-confirm-toast"
+          style={{
+            position: "fixed",
+            bottom: "1rem",
+            right: "1rem",
+            background: "#fff",
+            border: "0.0625rem solid #ccc",
+            borderRadius: "0.375rem",
+            padding: "0.75rem",
+            boxShadow: "0 0.25rem 0.5rem rgba(0,0,0,0.15)",
+            zIndex: 2000,
+            minWidth: "16rem",
+          }}
+        >
+          <p style={{ margin: "0 0 0.5rem 0" }}>
+            This invoice will be deleted. Are you sure?
+          </p>
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+            <button
+              onClick={() => setDeleteConfirm(null)}
+              style={{
+                background: "#ccc",
+                border: "none",
+                borderRadius: "0.25rem",
+                padding: "0.25rem 0.75rem",
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDelete}
+              style={{
+                background: "crimson",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                padding: "0.25rem 0.75rem",
+                cursor: "pointer",
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
