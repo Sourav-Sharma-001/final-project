@@ -72,7 +72,7 @@ export default function InvoiceTable() {
                 onClick={(e) => setRowOptions({ invoice, x: e.clientX, y: e.clientY })}
                 style={{ cursor: "pointer" }}
               >
-                <td>{invoice.autoProductId}</td>
+                <td>{invoice.clientProductId}</td>
                 <td>{invoice.referenceNumber || "-"}</td>
                 <td>₹ {invoice.price}</td>
                 <td>{invoice.status}</td>
@@ -150,7 +150,7 @@ export default function InvoiceTable() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="dropdown-item" onClick={() => handlePaid(dotOptions.invoice)}>
-              ✅ Paid
+              Paid
             </div>
           </div>
         </div>
