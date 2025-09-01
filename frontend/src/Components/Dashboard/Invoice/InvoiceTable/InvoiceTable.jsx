@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -6,11 +6,10 @@ import ViewInvoice from "./ViewInvoice/ViewInvoice";
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [rowOptionsInvoice, setRowOptionsInvoice] = useState(null);
+  const [rowOptions, setRowOptions] = useState(null);
+  const [dotOptions, setDotOptions] = useState(null);
   const rowsPerPage = 9;
-  const dropdownRefs = useRef([]);
 
   const invoices = Array.from({ length: 40 }).map((_, i) => ({
     id: `INV-${1000 + i}`,
@@ -30,29 +29,17 @@ export default function InvoiceTable() {
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentRows = invoices.slice(startIndex, startIndex + rowsPerPage);
 
-  const toggleDropdown = (index) => setOpenDropdown(openDropdown === index ? null : index);
-
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);
-    setOpenDropdown(null);
-    setRowOptionsInvoice(null);
+    setRowOptions(null);
+    setDotOptions(null);
   };
 
   const handleDeleteInvoice = (invoice) => {
     alert(`Deleted ${invoice.id}`);
-    setOpenDropdown(null);
-    setRowOptionsInvoice(null);
+    setRowOptions(null);
+    setDotOptions(null);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRefs.current.every((ref) => ref && !ref.contains(event.target))) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <div className="invoice-table-container">
@@ -75,30 +62,35 @@ export default function InvoiceTable() {
             {currentRows.map((invoice, i) => (
               <tr
                 key={i}
-                onClick={() => setRowOptionsInvoice(invoice)}
+                onClick={(e) => {
+                  setRowOptions({
+                    invoice,
+                    x: e.clientX,
+                    y: e.clientY,
+                  });
+                }}
                 style={{ cursor: "pointer" }}
               >
                 <td>{invoice.id}</td>
                 <td>{invoice.reference}</td>
                 <td>₹ {invoice.amount}</td>
                 <td>{invoice.status}</td>
-                <td
-                  className="due-date-cell"
-                  ref={(el) => (dropdownRefs.current[i] = el)}
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <td className="due-date-cell">
                   <span>{invoice.dueDate}</span>
-                  <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
-                  {openDropdown === i && (
-                    <div className="dropdown-menu">
-                      <div className="dropdown-item" onClick={() => handleViewInvoice(invoice)}>
-                        <LiaEyeSolid size={18} /> View Invoice
-                      </div>
-                      <div className="dropdown-item" onClick={() => handleDeleteInvoice(invoice)}>
-                        <RiDeleteBin6Line size={18} /> Delete
-                      </div>
-                    </div>
-                  )}
+                  <button
+                    className="dots-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setDotOptions({
+                        invoice,
+                        x: rect.left,
+                        y: rect.top,
+                      });
+                    }}
+                  >
+                    ⋮
+                  </button>
                 </td>
               </tr>
             ))}
@@ -126,27 +118,65 @@ export default function InvoiceTable() {
         </button>
       </div>
 
-      {/* Small modal when clicking a row */}
-      {rowOptionsInvoice && (
-        <div className="row-options-modal" onClick={() => setRowOptionsInvoice(null)}>
+      {rowOptions && (
+        <div className="row-options-modal" onClick={() => setRowOptions(null)}>
           <div
             className="row-options-modal-content"
+            style={{
+              position: "absolute",
+              top: rowOptions.y,
+              left: rowOptions.x,
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="dropdown-item" onClick={() => handleViewInvoice(rowOptionsInvoice)}>
+            <div
+              className="dropdown-item"
+              onClick={() => handleViewInvoice(rowOptions.invoice)}
+            >
               <LiaEyeSolid size={18} /> View Invoice
             </div>
-            <div className="dropdown-item" onClick={() => handleDeleteInvoice(rowOptionsInvoice)}>
+            <div
+              className="dropdown-item"
+              onClick={() => handleDeleteInvoice(rowOptions.invoice)}
+            >
               <RiDeleteBin6Line size={18} /> Delete
             </div>
           </div>
         </div>
       )}
 
-      {/* Full invoice modal (unchanged) */}
+      {dotOptions && (
+        <div className="row-options-modal" onClick={() => setDotOptions(null)}>
+          <div
+            className="dot-options-modal-content"
+            style={{
+              position: "absolute",
+              top: dotOptions.y,
+              left: dotOptions.x,
+              transform: "translate(-100%, 0)",
+              zIndex: 1000,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="dropdown-item"
+              onClick={() => {
+                alert(`${dotOptions.invoice.id} Paid`);
+                setDotOptions(null);
+              }}
+            >
+              Paid
+            </div>
+          </div>
+        </div>
+      )}
+
       {selectedInvoice && (
         <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
-          <div className="invoice-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="invoice-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <ViewInvoice invoice={selectedInvoice} />
           </div>
         </div>
