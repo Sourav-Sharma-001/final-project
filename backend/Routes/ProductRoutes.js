@@ -103,13 +103,17 @@ router.put("/pay/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
-    if (product.status === "Paid") return res.status(400).json({ message: "Already Paid" });
+
+    if (product.status === "Paid") {
+      return res.json(product);
+    }
 
     let refNumber;
     let exists = true;
+
     while (exists) {
-      const randomNum = Math.floor(Math.random() * 1000);
-      refNumber = `Inv-${randomNum.toString().padStart(3, "0")}`;
+      const randomNum = Math.floor(Math.random() * 1000); // 0–999
+      refNumber = `Inv-${randomNum.toString().padStart(3, "0")}`; // zero-padded
       exists = await Product.findOne({ referenceNumber: refNumber });
     }
 
@@ -122,6 +126,7 @@ router.put("/pay/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Delete product
 router.delete("/:id", async (req, res) => {
