@@ -11,7 +11,8 @@ export default function OverrallInvoice() {
   const [paidCount, setPaidCount] = useState(0);
   const [unpaidCount, setUnpaidCount] = useState(0);
   const [unpaidRevenue, setUnpaidRevenue] = useState(0);
-  const { processed } = useContext(AppContext);
+  const [customersCount, setCustomersCount] = useState(0);
+  const { processed, refreshInvoices } = useContext(AppContext);
 
   const fetchProducts = async () => {
     try {
@@ -35,6 +36,9 @@ export default function OverrallInvoice() {
       const unpaidProducts = data.filter(p => p.status === "Unpaid");
       setUnpaidCount(unpaidProducts.length);
       setUnpaidRevenue(unpaidProducts.reduce((acc, p) => acc + (p.price || 0), 0));
+
+      const uniqueCustomers = new Set(data.map(p => p.customerName || p.clientProductId));
+      setCustomersCount(uniqueCustomers.size);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -42,7 +46,7 @@ export default function OverrallInvoice() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [refreshInvoices]);
 
   return (
     <div className="overall-invoice">
@@ -79,7 +83,7 @@ export default function OverrallInvoice() {
               {paidCount}
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
-              {totalRevenue}
+              {customersCount}
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-around" }}>

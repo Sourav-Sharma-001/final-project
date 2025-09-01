@@ -14,7 +14,7 @@ export default function InvoiceTable() {
   const [rowOptions, setRowOptions] = useState(null);
   const [dotOptions, setDotOptions] = useState(null);
   const rowsPerPage = 9;
-  const { incrementProcessed } = useContext(AppContext);
+  const { incrementProcessed, triggerRefresh } = useContext(AppContext);
 
   const fetchProducts = async () => {
     try {
@@ -44,9 +44,10 @@ export default function InvoiceTable() {
   const handleDeleteInvoice = async (invoice) => {
     try {
       await axios.delete(`http://localhost:5000/api/products/${invoice._id}`);
-      fetchProducts(); 
-      setRowOptions(null); 
-      setDotOptions(null); 
+      fetchProducts();
+      setRowOptions(null);
+      setDotOptions(null);
+      triggerRefresh();
     } catch (err) {
       console.error(err);
     }
