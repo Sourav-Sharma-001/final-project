@@ -33,11 +33,11 @@
 
 .invoice-table th,
 .invoice-table td {
-  border: 0.0625rem solid #ddd; /* 1px = 0.0625rem */
-  padding: 0.5rem;           
-  text-align: center;       
+  border: 0.0625rem solid #ddd;
+  padding: 0.5rem;
+  text-align: center;
   font-size: 0.9rem;
-  word-wrap: break-word;    
+  word-wrap: break-word;
 }
 
 .invoice-table th {
@@ -66,7 +66,7 @@
 
 .dots-button {
   position: absolute;
-  right: 0.1875rem; /* 3px */
+  right: 0.1875rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -120,7 +120,7 @@
   border-radius: 0.25rem;
   font-size: 0.85rem;
   cursor: pointer;
-  min-width: 3.75rem; /* 60px */
+  min-width: 3.75rem;
   text-align: center;
 }
 
@@ -137,8 +137,10 @@
 
 .invoice-modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
@@ -148,24 +150,24 @@
 
 .invoice-modal-content {
   background: #fff;
-  padding: 1.25rem; /* 20px */
-  width: 31.25rem;  /* 500px */
+  padding: 1.25rem;
+  width: 31.25rem;
   max-height: 90vh;
   overflow-y: auto;
-  border-radius: 0.5rem; /* 8px */
-  box-shadow: 0 0.25rem 0.9375rem rgba(0,0,0,0.3); /* 4px 15px */
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.9375rem rgba(0,0,0,0.3);
 }
 
 .invoice-modal-content h2, 
 .invoice-modal-content h3 {
-  margin: 0.3125rem 0; /* 5px */
+  margin: 0.3125rem 0;
   text-align: center;
 }
 
 .invoice-items {
   width: 100%;
   border-collapse: collapse;
-  margin: 0.625rem 0; /* 10px */
+  margin: 0.625rem 0;
 }
 
 .invoice-items th, 
@@ -177,15 +179,14 @@
 
 .close-modal {
   display: block;
-  margin: 0.625rem auto 0; /* 10px */
-  padding: 0.5rem 0.9375rem; /* 8px 15px */
+  margin: 0.625rem auto 0;
+  padding: 0.5rem 0.9375rem;
   background: crimson;
   color: #fff;
   border: none;
-  border-radius: 0.25rem; /* 4px */
+  border-radius: 0.25rem;
   cursor: pointer;
 }
-
 
 .row-options-modal {
   position: fixed;
@@ -201,10 +202,10 @@
 
 .row-options-modal-content {
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.375rem;
   padding: 0.5rem;
-  min-width: 180px;
+  min-width: 11.25rem; /* 180px */
 }
 
 .dot-options-modal-content {

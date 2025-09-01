@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ViewInvoice from "./ViewInvoice/ViewInvoice";
+import axios from "axios";
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [rowOptions, setRowOptions] = useState(null);
   const [dotOptions, setDotOptions] = useState(null);
   const rowsPerPage = 9;
 
-  const invoices = Array.from({ length: 40 }).map((_, i) => ({
-    id: `INV-${1000 + i}`,
-    reference: `REF-${2000 + i}`,
-    amount: 100 + i * 10,
-    status: i % 2 === 0 ? "Paid" : "Pending",
-    dueDate: "2025-12-31",
-    customer: `Customer ${i + 1}`,
-    items: [
-      { name: "Rice", qty: 2, price: 50 },
-      { name: "Milk", qty: 1, price: 30 },
-      { name: "Bread", qty: 3, price: 25 },
-    ],
-  }));
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/products?page=${currentPage}&limit=${rowsPerPage}`);
+      setProducts(res.data.products || []);
+      setTotalPages(res.data.totalPages || 1);
+    } catch (err) {
+      console.error(err);
+      setProducts([]);
+      setTotalPages(1);
+    }
+  };
 
-  const totalPages = Math.max(Math.ceil(invoices.length / rowsPerPage), 1);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const currentRows = invoices.slice(startIndex, startIndex + rowsPerPage);
+  useEffect(() => {
+    fetchProducts();
+  }, [currentPage]);
 
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);
@@ -35,9 +36,16 @@ export default function InvoiceTable() {
     setDotOptions(null);
   };
 
-  const handleDeleteInvoice = (invoice) => {
-    alert(`Deleted ${invoice.id}`);
+  const handleDeleteInvoice = async (invoice) => {
+    await axios.delete(`/api/products/${invoice._id}`);
+    fetchProducts();
     setRowOptions(null);
+    setDotOptions(null);
+  };
+
+  const handlePaid = async (invoice) => {
+    await axios.put(`/api/products/pay/${invoice._id}`);
+    fetchProducts();
     setDotOptions(null);
   };
 
@@ -46,7 +54,6 @@ export default function InvoiceTable() {
       <div className="invoice-table-heading">
         <h2>Invoice List</h2>
       </div>
-
       <div className="invoice-table">
         <table>
           <thead>
@@ -59,34 +66,28 @@ export default function InvoiceTable() {
             </tr>
           </thead>
           <tbody>
-            {currentRows.map((invoice, i) => (
+            {products.map((invoice, i) => (
               <tr
                 key={i}
-                onClick={(e) => {
-                  setRowOptions({
-                    invoice,
-                    x: e.clientX,
-                    y: e.clientY,
-                  });
-                }}
+                onClick={(e) => setRowOptions({ invoice, x: e.clientX, y: e.clientY })}
                 style={{ cursor: "pointer" }}
               >
-                <td>{invoice.id}</td>
-                <td>{invoice.reference}</td>
-                <td>₹ {invoice.amount}</td>
+                <td>{invoice.autoProductId}</td>
+                <td>{invoice.referenceNumber || "-"}</td>
+                <td>₹ {invoice.price}</td>
                 <td>{invoice.status}</td>
                 <td className="due-date-cell">
-                  <span>{invoice.dueDate}</span>
+                  <span>
+                    {invoice.expiryDate
+                      ? new Date(invoice.expiryDate).toISOString().split("T")[0]
+                      : "-"}
+                  </span>
                   <button
                     className="dots-button"
                     onClick={(e) => {
                       e.stopPropagation();
                       const rect = e.currentTarget.getBoundingClientRect();
-                      setDotOptions({
-                        invoice,
-                        x: rect.left,
-                        y: rect.top,
-                      });
+                      setDotOptions({ invoice, x: rect.left, y: rect.top });
                     }}
                   >
                     ⋮
@@ -122,23 +123,13 @@ export default function InvoiceTable() {
         <div className="row-options-modal" onClick={() => setRowOptions(null)}>
           <div
             className="row-options-modal-content"
-            style={{
-              position: "absolute",
-              top: rowOptions.y,
-              left: rowOptions.x,
-            }}
+            style={{ position: "absolute", top: rowOptions.y, left: rowOptions.x }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="dropdown-item"
-              onClick={() => handleViewInvoice(rowOptions.invoice)}
-            >
+            <div className="dropdown-item" onClick={() => handleViewInvoice(rowOptions.invoice)}>
               <LiaEyeSolid size={18} /> View Invoice
             </div>
-            <div
-              className="dropdown-item"
-              onClick={() => handleDeleteInvoice(rowOptions.invoice)}
-            >
+            <div className="dropdown-item" onClick={() => handleDeleteInvoice(rowOptions.invoice)}>
               <RiDeleteBin6Line size={18} /> Delete
             </div>
           </div>
@@ -154,18 +145,12 @@ export default function InvoiceTable() {
               top: dotOptions.y,
               left: dotOptions.x,
               transform: "translate(-100%, 0)",
-              zIndex: 1000,
+              zIndex: 1000
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="dropdown-item"
-              onClick={() => {
-                alert(`${dotOptions.invoice.id} Paid`);
-                setDotOptions(null);
-              }}
-            >
-              Paid
+            <div className="dropdown-item" onClick={() => handlePaid(dotOptions.invoice)}>
+              ✅ Paid
             </div>
           </div>
         </div>
@@ -173,10 +158,7 @@ export default function InvoiceTable() {
 
       {selectedInvoice && (
         <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
-          <div
-            className="invoice-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="invoice-modal-content" onClick={(e) => e.stopPropagation()}>
             <ViewInvoice invoice={selectedInvoice} />
           </div>
         </div>

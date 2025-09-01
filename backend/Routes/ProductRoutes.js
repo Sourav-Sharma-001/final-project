@@ -7,11 +7,10 @@ const Product = require("../Models/Product");
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
+// Upload CSV
 router.post("/upload-csv", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const results = [];
     const errors = [];
@@ -52,30 +51,28 @@ router.post("/upload-csv", upload.single("file"), async (req, res) => {
   }
 });
 
+// Get products with pagination
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
+    const total = await Product.countDocuments();
+
     const products = await Product.find()
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
-    const total = await Product.countDocuments();
-
     const totalPages = Math.ceil(total / limit);
 
-    res.json({
-      products,
-      totalPages,
-      currentPage: page,
-      total,
-    });
+    res.json({ products, totalPages, currentPage: page, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// Get single product
 router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -86,6 +83,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Update product
 router.put("/:id", async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -100,12 +98,36 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// Mark as Paid
+router.put("/pay/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (product.status === "Paid") return res.status(400).json({ message: "Already Paid" });
+
+    let refNumber;
+    let exists = true;
+    while (exists) {
+      const randomNum = Math.floor(Math.random() * 1000);
+      refNumber = `Inv-${randomNum.toString().padStart(3, "0")}`;
+      exists = await Product.findOne({ referenceNumber: refNumber });
+    }
+
+    product.status = "Paid";
+    product.referenceNumber = refNumber;
+    await product.save();
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete product
 router.delete("/:id", async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-    if (!deletedProduct) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+    if (!deletedProduct) return res.status(404).json({ message: "Product not found" });
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });

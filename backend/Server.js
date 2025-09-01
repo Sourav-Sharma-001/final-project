@@ -24,6 +24,7 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
+// Daily Cron Job to mark expired products
 cron.schedule("0 0 * * *", async () => {
   try {
     const today = new Date();
@@ -42,7 +43,6 @@ cron.schedule("0 0 * * *", async () => {
 app.get("/", (req, res) => {
   res.send("Backend API is running");
 });
-
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
