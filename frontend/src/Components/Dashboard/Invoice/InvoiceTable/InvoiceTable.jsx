@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./InvoiceTable.css";
 import { LiaEyeSolid } from "react-icons/lia";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ViewInvoice from "./ViewInvoice/ViewInvoice";
 import axios from "axios";
+import { AppContext } from "../../../ContextAPI/ContextAPI";
 
 export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +14,7 @@ export default function InvoiceTable() {
   const [rowOptions, setRowOptions] = useState(null);
   const [dotOptions, setDotOptions] = useState(null);
   const rowsPerPage = 9;
+  const { incrementProcessed } = useContext(AppContext);
 
   const fetchProducts = async () => {
     try {
@@ -36,6 +38,7 @@ export default function InvoiceTable() {
     setSelectedInvoice(invoice);
     setRowOptions(null);
     setDotOptions(null);
+    incrementProcessed();
   };
 
   const handleDeleteInvoice = async (invoice) => {
@@ -48,11 +51,9 @@ export default function InvoiceTable() {
       console.error(err);
     }
   };
-  
 
   const handlePaid = async (invoice) => {
     if (invoice.status === "Paid") return;
-
     try {
       const res = await axios.put(
         `http://localhost:5000/api/products/pay/${invoice._id}`
