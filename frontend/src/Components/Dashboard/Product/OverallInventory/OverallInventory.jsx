@@ -17,21 +17,14 @@ export default function OverallInventory() {
     fetchProducts();
   }, []);
 
-  const today = new Date();
   const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(today.getDate() - 7);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   const last7DaysProducts = products.filter(
     p => new Date(p.createdAt) >= sevenDaysAgo
   );
 
-  const activeProducts = last7DaysProducts.filter(
-    p => p.status !== "Expired"
-  );
-
-  const expiredProducts = last7DaysProducts.filter(
-    p => p.expiryDate && new Date(p.expiryDate) < today
-  );
+  const activeProducts = last7DaysProducts.filter(p => p.status !== "Expired");
 
   const totalCategories = [...new Set(activeProducts.map(p => p.category))].length;
   const totalProducts = activeProducts.length;
@@ -101,7 +94,7 @@ export default function OverallInventory() {
           </div>
         </div>
 
-        <div className="inventory-block">
+        <div className="inventory-block" style={{ border: "none" }}>
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Low Stocks</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
@@ -114,18 +107,6 @@ export default function OverallInventory() {
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Last 7 days</div>
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Revenue</div>
-          </div>
-        </div>
-
-        <div className="inventory-block" style={{ border: "none" }}>
-          <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Expired Products</h4>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#FF4D4F" }}>
-              {expiredProducts.length}
-            </div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <div style={{ fontSize: "0.7rem", color: "#FF4D4F" }}>Expired</div>
           </div>
         </div>
       </div>
