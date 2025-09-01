@@ -7,6 +7,18 @@ const Product = require("../Models/Product");
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
+// Add Product
+router.post("/", async (req, res) => {
+  try {
+    const productData = req.body;
+    const newProduct = new Product(productData);
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Upload CSV
 router.post("/upload-csv", upload.single("file"), async (req, res) => {
   try {
@@ -126,7 +138,6 @@ router.put("/pay/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // Delete product
 router.delete("/:id", async (req, res) => {

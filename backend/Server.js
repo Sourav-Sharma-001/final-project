@@ -24,7 +24,6 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-// Daily Cron Job to mark expired products
 cron.schedule("0 0 * * *", async () => {
   try {
     const today = new Date();
