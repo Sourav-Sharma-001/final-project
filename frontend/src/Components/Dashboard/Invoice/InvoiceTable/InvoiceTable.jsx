@@ -8,44 +8,40 @@ export default function InvoiceTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [invoices, setInvoices] = useState(() =>
-    Array.from({ length: 40 }).map((_, i) => ({
-      id: `INV-${1000 + i}`,
-      reference: `REF-${2000 + i}`,
-      amount: 100 + i * 10,
-      status: i % 2 === 0 ? "Paid" : "Pending",
-      dueDate: "2025-12-31",
-      customer: `Customer ${i + 1}`,
-      items: [
-        { name: "Rice", qty: 2, price: 50 },
-        { name: "Milk", qty: 1, price: 30 },
-        { name: "Bread", qty: 3, price: 25 },
-      ],
-    }))
-  );
+  const [rowOptionsInvoice, setRowOptionsInvoice] = useState(null);
   const rowsPerPage = 9;
   const dropdownRefs = useRef([]);
+
+  const invoices = Array.from({ length: 40 }).map((_, i) => ({
+    id: `INV-${1000 + i}`,
+    reference: `REF-${2000 + i}`,
+    amount: 100 + i * 10,
+    status: i % 2 === 0 ? "Paid" : "Pending",
+    dueDate: "2025-12-31",
+    customer: `Customer ${i + 1}`,
+    items: [
+      { name: "Rice", qty: 2, price: 50 },
+      { name: "Milk", qty: 1, price: 30 },
+      { name: "Bread", qty: 3, price: 25 },
+    ],
+  }));
 
   const totalPages = Math.max(Math.ceil(invoices.length / rowsPerPage), 1);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentRows = invoices.slice(startIndex, startIndex + rowsPerPage);
 
-  const toggleDropdown = (index) =>
-    setOpenDropdown(openDropdown === index ? null : index);
+  const toggleDropdown = (index) => setOpenDropdown(openDropdown === index ? null : index);
 
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);
     setOpenDropdown(null);
+    setRowOptionsInvoice(null);
   };
 
   const handleDeleteInvoice = (invoice) => {
-    setInvoices((prev) => {
-      const updated = prev.filter((x) => x.id !== invoice.id);
-      const newTotalPages = Math.max(Math.ceil(updated.length / rowsPerPage), 1);
-      if (currentPage > newTotalPages) setCurrentPage(newTotalPages);
-      return updated;
-    });
+    alert(`Deleted ${invoice.id}`);
     setOpenDropdown(null);
+    setRowOptionsInvoice(null);
   };
 
   useEffect(() => {
@@ -77,7 +73,11 @@ export default function InvoiceTable() {
           </thead>
           <tbody>
             {currentRows.map((invoice, i) => (
-              <tr key={invoice.id}>
+              <tr
+                key={i}
+                onClick={() => setRowOptionsInvoice(invoice)}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{invoice.id}</td>
                 <td>{invoice.reference}</td>
                 <td>₹ {invoice.amount}</td>
@@ -85,6 +85,7 @@ export default function InvoiceTable() {
                 <td
                   className="due-date-cell"
                   ref={(el) => (dropdownRefs.current[i] = el)}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <span>{invoice.dueDate}</span>
                   <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
@@ -125,6 +126,24 @@ export default function InvoiceTable() {
         </button>
       </div>
 
+      {/* Small modal when clicking a row */}
+      {rowOptionsInvoice && (
+        <div className="row-options-modal" onClick={() => setRowOptionsInvoice(null)}>
+          <div
+            className="row-options-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="dropdown-item" onClick={() => handleViewInvoice(rowOptionsInvoice)}>
+              <LiaEyeSolid size={18} /> View Invoice
+            </div>
+            <div className="dropdown-item" onClick={() => handleDeleteInvoice(rowOptionsInvoice)}>
+              <RiDeleteBin6Line size={18} /> Delete
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full invoice modal (unchanged) */}
       {selectedInvoice && (
         <div className="invoice-modal" onClick={() => setSelectedInvoice(null)}>
           <div className="invoice-modal-content" onClick={(e) => e.stopPropagation()}>
