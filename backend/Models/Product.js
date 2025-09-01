@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema({
   unit: { type: String },
   expiryDate: { type: Date },
   threshold: { type: Number },
-  image: { type: String }
+  image: { type: String },
+  status: { type: String, default: "Active" }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);

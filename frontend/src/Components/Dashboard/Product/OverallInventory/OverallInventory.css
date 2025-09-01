@@ -25,3 +25,8 @@
   place-content: center;
   border-right: 0.1rem solid rgb(197, 196, 196);
 }
+
+.expired {
+  color: red;
+  font-weight: bold;
+}

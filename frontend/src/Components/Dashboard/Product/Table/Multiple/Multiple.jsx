@@ -3,7 +3,7 @@ import "./Multiple.css";
 import { FaFileCsv } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-export default function Multiple({ onClose }) {
+export default function Multiple({ onClose, onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [step, setStep] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
@@ -55,14 +55,16 @@ export default function Multiple({ onClose }) {
         body: formData,
       });
       const data = await res.json();
+
       if (res.ok) {
-        toast.success(data.message);
+        toast.success(data.message || "Upload successful");
+        if (onUploadSuccess) onUploadSuccess(); // trigger table refresh
         onClose();
       } else {
         toast.error(data.error || "Upload failed");
       }
     } catch (err) {
-      toast.error(err.message);
+      toast.error("Failed to upload CSV");
     } finally {
       setUploading(false);
     }

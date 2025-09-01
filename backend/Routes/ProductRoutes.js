@@ -1,61 +1,76 @@
 const express = require("express");
-const router = express.Router();
-const Product = require("../Models/Product");
 const multer = require("multer");
 const csv = require("csv-parser");
 const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
+const Product = require("../Models/Product");
 
+const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
-router.post("/", async (req, res) => {
-  try {
-    const newProduct = new Product(req.body);
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
 router.post("/upload-csv", upload.single("file"), async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
-  const products = [];
-  fs.createReadStream(req.file.path)
-    .pipe(csv())
-    .on("data", (row) => {
-      products.push({
-        clientProductId: row.clientProductId,
-        autoProductId: uuidv4(),
-        productName: row.productName,
-        category: row.category,
-        price: Number(row.price),
-        quantity: Number(row.quantity),
-        unit: row.unit,
-        expiryDate: row.expiryDate ? new Date(row.expiryDate) : null,
-        threshold: Number(row.threshold),
-        image: row.image || "",
+    const results = [];
+    const errors = [];
+
+    fs.createReadStream(req.file.path)
+      .pipe(csv())
+      .on("data", (data) => {
+        try {
+          data.price = Number(data.price);
+          data.quantity = Number(data.quantity);
+          data.threshold = Number(data.threshold);
+          data.expiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
+          if (data.image === "") data.image = null;
+          if (!data.clientProductId || !data.productName || isNaN(data.price) || isNaN(data.quantity)) {
+            throw new Error("Missing required fields or invalid number");
+          }
+          results.push(data);
+        } catch (e) {
+          errors.push({ row: data, error: e.message });
+        }
+      })
+      .on("end", async () => {
+        try {
+          if (errors.length) {
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({ error: "Validation failed", details: errors });
+          }
+          await Product.insertMany(results);
+          fs.unlinkSync(req.file.path);
+          res.json({ message: "CSV uploaded successfully", count: results.length });
+        } catch (err) {
+          fs.unlinkSync(req.file.path);
+          res.status(500).json({ error: "Database insert failed", details: err.message });
+        }
       });
-    })
-    .on("end", async () => {
-      try {
-        await Product.insertMany(products);
-        fs.unlinkSync(req.file.path);
-        res.status(201).json({ message: "Products uploaded successfully" });
-      } catch (err) {
-        res.status(500).json({ error: err.message });
-      }
-    })
-    .on("error", (err) => {
-      res.status(500).json({ error: err.message });
-    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const products = await Product.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await Product.countDocuments();
+
+    const totalPages = Math.ceil(total / limit);
+
+    res.json({
+      products,
+      totalPages,
+      currentPage: page,
+      total,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -64,27 +79,36 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
     res.json(product);
   } catch (err) {
-    res.status(404).json({ error: "Product not found" });
+    res.status(500).json({ error: err.message });
   }
 });
 
 router.put("/:id", async (req, res) => {
   try {
-    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
+    res.json(updatedProduct);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
 router.delete("/:id", async (req, res) => {
   try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.json({ message: "Product deleted" });
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ message: "Product deleted successfully" });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 

@@ -11,14 +11,15 @@ export default function Table() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [products, setProducts] = useState([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const rowsPerPage = 9;
   const navigate = useNavigate();
 
   const dropdownRefs = useRef({});
 
   useEffect(() => {
-    fetchProducts();
-  }, [refreshFlag]);
+    fetchProducts(currentPage);
+  }, [refreshFlag, currentPage]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,22 +31,44 @@ export default function Table() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
-      setProducts(res.data);
+      const res = await axios.get(`http://localhost:5000/api/products?page=${page}&limit=${rowsPerPage}`);
+      setProducts(res.data.products || []);
+      setTotalPages(res.data.totalPages || 1);
+      setCurrentPage(res.data.currentPage || 1);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching products:", err);
     }
   };
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  const openMultiple = () => { setShowModal(false); setShowMultiple(true); };
-  const closeMultiple = () => { setShowMultiple(false); setRefreshFlag(f => !f); };
-  const goToIndividual = () => { setShowModal(false); navigate("/product/individual"); };
-  const toggleDropdown = (index) => { setOpenDropdown(openDropdown === index ? null : index); };
 
+  const openMultiple = () => {
+    setShowModal(false);
+    setShowMultiple(true);
+  };
+
+  const closeMultiple = () => {
+    setShowMultiple(false);
+  };
+
+  const handleUploadSuccess = () => {
+    setRefreshFlag(f => !f);
+    setShowMultiple(false);
+  };
+
+  const goToIndividual = () => {
+    setShowModal(false);
+    navigate("/product/individual");
+  };
+
+  const toggleDropdown = (index) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
+
+  // RESTORED EDIT FUNCTIONALITY
   const handleEdit = (id) => {
     navigate(`/product/individual/${id}`);
     setOpenDropdown(null);
@@ -57,13 +80,9 @@ export default function Table() {
       setRefreshFlag(f => !f);
       setOpenDropdown(null);
     } catch (err) {
-      console.error(err);
+      console.error("Error deleting product:", err);
     }
   };
-
-  const totalPages = Math.max(Math.ceil(products.length / rowsPerPage), 1);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const currentRows = products.slice(startIndex, startIndex + rowsPerPage);
 
   const getAvailability = (quantity, threshold) => {
     if (quantity === 0) return { text: "Out of Stock", className: "out-of-stock" };
@@ -91,33 +110,39 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {currentRows.map((product, i) => {
-              const availability = getAvailability(product.quantity, product.threshold);
-              return (
-                <tr key={product._id}>
-                  <td>{product.productName}</td>
-                  <td>₹ {product.price}</td>
-                  <td>{product.quantity}</td>
-                  <td>{product.threshold}</td>
-                  <td>{product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "N/A"}</td>
-                  <td className={`availability-cell ${availability.className}`}>
-                    <span className="availability-text">{availability.text}</span>
-                    <div
-                      className="dropdown-wrapper"
-                      ref={el => dropdownRefs.current[i] = el}
-                    >
-                      <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
-                      {openDropdown === i && (
-                        <div className="dropdown-menu">
-                          <div className="dropdown-item" onClick={() => handleEdit(product._id)}>Edit</div>
-                          <div className="dropdown-item" onClick={() => handleDelete(product._id)}>Delete</div>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {products.length > 0 ? (
+              products.map((product, i) => {
+                const availability = getAvailability(product.quantity, product.threshold);
+                return (
+                  <tr key={product._id}>
+                    <td>{product.productName}</td>
+                    <td>₹ {product.price}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.threshold}</td>
+                    <td>{product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "N/A"}</td>
+                    <td className={`availability-cell ${availability.className}`}>
+                      <span className="availability-text">{availability.text}</span>
+                      <div
+                        className="dropdown-wrapper"
+                        ref={el => dropdownRefs.current[i] = el}
+                      >
+                        <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
+                        {openDropdown === i && (
+                          <div className="dropdown-menu">
+                            <div className="dropdown-item" onClick={() => handleEdit(product._id)}>Edit</div>
+                            <div className="dropdown-item" onClick={() => handleDelete(product._id)}>Delete</div>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>No products found</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -149,7 +174,12 @@ export default function Table() {
         </div>
       )}
 
-      {showMultiple && <Multiple onClose={closeMultiple} />}
+      {showMultiple && (
+        <Multiple
+          onClose={closeMultiple}
+          onUploadSuccess={handleUploadSuccess}
+        />
+      )}
     </div>
   );
 }
