@@ -87,7 +87,7 @@ export default function OverrallInvoice() {
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Paid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
-              ₹ {paidAmount}
+            ₹ {paidAmount.toFixed(2)}
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
               {paidCount}
@@ -104,7 +104,7 @@ export default function OverrallInvoice() {
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Unpaid Amount</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
-              ₹ {unpaidAmount}
+            ₹ {unpaidAmount.toFixed(2)}
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
               {unpaidCount}
