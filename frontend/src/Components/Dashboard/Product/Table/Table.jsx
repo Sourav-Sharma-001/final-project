@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Table.css";
 import Multiple from "./Multiple/Multiple";
 
-export default function Table() {
+export default function Table({ searchTerm }) {
   const [showModal, setShowModal] = useState(false);
   const [showMultiple, setShowMultiple] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,9 +50,7 @@ export default function Table() {
     setShowMultiple(true);
   };
 
-  const closeMultiple = () => {
-    setShowMultiple(false);
-  };
+  const closeMultiple = () => setShowMultiple(false);
 
   const handleUploadSuccess = () => {
     setRefreshFlag(f => !f);
@@ -68,7 +66,6 @@ export default function Table() {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
-  // RESTORED EDIT FUNCTIONALITY
   const handleEdit = (id) => {
     navigate(`/product/individual/${id}`);
     setOpenDropdown(null);
@@ -90,6 +87,22 @@ export default function Table() {
     return { text: "In Stock", className: "in-stock" };
   };
 
+  // Filter products across all columns
+  const filteredProducts = products.filter(product => {
+    const availability = getAvailability(product.quantity, product.threshold);
+    const expiry = product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "";
+    const term = searchTerm.toLowerCase();
+
+    return (
+      product.productName.toLowerCase().includes(term) ||
+      product.price.toString().includes(term) ||
+      product.quantity.toString().includes(term) ||
+      product.threshold.toString().includes(term) ||
+      expiry.includes(term) ||
+      availability.text.toLowerCase().includes(term)
+    );
+  });
+
   return (
     <div className="table-container">
       <div className="table-heading">
@@ -110,8 +123,8 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {products.length > 0 ? (
-              products.map((product, i) => {
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product, i) => {
                 const availability = getAvailability(product.quantity, product.threshold);
                 return (
                   <tr key={product._id}>

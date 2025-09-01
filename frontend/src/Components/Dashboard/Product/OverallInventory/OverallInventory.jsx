@@ -9,7 +9,7 @@ export default function OverallInventory() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
-        setProducts(res.data.products);
+        setProducts(res.data.products || []);
       } catch (err) {
         console.error(err);
       }
@@ -17,24 +17,45 @@ export default function OverallInventory() {
     fetchProducts();
   }, []);
 
+  const today = new Date();
   const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const last7DaysProducts = products.filter(p => new Date(p.createdAt) >= sevenDaysAgo);
+  sevenDaysAgo.setDate(today.getDate() - 7);
 
-  const expiredProducts = last7DaysProducts.filter(p => p.status === "Expired");
-  const activeProducts = last7DaysProducts.filter(p => p.status !== "Expired");
+  const last7DaysProducts = products.filter(
+    p => new Date(p.createdAt) >= sevenDaysAgo
+  );
+
+  const activeProducts = last7DaysProducts.filter(
+    p => p.status !== "Expired"
+  );
+
+  const expiredProducts = last7DaysProducts.filter(
+    p => p.expiryDate && new Date(p.expiryDate) < today
+  );
 
   const totalCategories = [...new Set(activeProducts.map(p => p.category))].length;
   const totalProducts = activeProducts.length;
-  const totalRevenue = activeProducts.reduce((acc, p) => acc + (p.price * p.quantity), 0);
+  const totalRevenue = activeProducts.reduce(
+    (acc, p) => acc + ((p.price || 0) * (p.quantity || 0)),
+    0
+  ).toFixed(2);
 
-  const lowStockProducts = activeProducts.filter(p => p.quantity <= p.threshold);
+  const lowStockProducts = activeProducts.filter(
+    p => (p.quantity || 0) <= (p.threshold || 0)
+  );
   const lowStockCount = lowStockProducts.length;
-  const lowStockValue = lowStockProducts.reduce((acc, p) => acc + (p.price * p.quantity), 0);
+  const lowStockValue = lowStockProducts.reduce(
+    (acc, p) => acc + ((p.price || 0) * (p.quantity || 0)),
+    0
+  ).toFixed(2);
 
-  const topSellingProducts = [...activeProducts].sort((a, b) => b.quantity - a.quantity).slice(0, 1);
+  const topSellingProducts = [...activeProducts]
+    .sort((a, b) => (b.quantity || 0) - (a.quantity || 0))
+    .slice(0, 1);
   const topSellingCount = topSellingProducts.length > 0 ? topSellingProducts[0].quantity : 0;
-  const topSellingRevenue = topSellingProducts.length > 0 ? topSellingProducts[0].price * topSellingProducts[0].quantity : 0;
+  const topSellingRevenue = topSellingProducts.length > 0 
+    ? ((topSellingProducts[0].price || 0) * (topSellingProducts[0].quantity || 0)).toFixed(2)
+    : "0.00";
 
   return (
     <div className="overall-inventory">
@@ -47,6 +68,7 @@ export default function OverallInventory() {
           </div>
           <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Last 7 days</div>
         </div>
+
         <div className="inventory-block">
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Total Products</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -62,6 +84,7 @@ export default function OverallInventory() {
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Revenue</div>
           </div>
         </div>
+
         <div className="inventory-block">
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Top Selling</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -77,7 +100,8 @@ export default function OverallInventory() {
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Revenue</div>
           </div>
         </div>
-        <div className="inventory-block" style={{ border: "none" }}>
+
+        <div className="inventory-block">
           <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Low Stocks</h4>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#858D9D" }}>
@@ -90,6 +114,18 @@ export default function OverallInventory() {
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Last 7 days</div>
             <div style={{ fontSize: "0.7rem", color: "#858D9D" }}>Revenue</div>
+          </div>
+        </div>
+
+        <div className="inventory-block" style={{ border: "none" }}>
+          <h4 id="product-h4" style={{ marginLeft: "3rem" }}>Expired Products</h4>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#FF4D4F" }}>
+              {expiredProducts.length}
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div style={{ fontSize: "0.7rem", color: "#FF4D4F" }}>Expired</div>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import ViewInvoice from "./ViewInvoice/ViewInvoice";
 import axios from "axios";
 import { AppContext } from "../../../ContextAPI/ContextAPI";
 
-export default function InvoiceTable({ searchTerm }) { // searchTerm from parent
+export default function InvoiceTable({ searchTerm }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -36,14 +36,17 @@ export default function InvoiceTable({ searchTerm }) { // searchTerm from parent
 
   const filteredProducts = products.filter(invoice => {
     const term = searchTerm.toLowerCase();
+    const dueDate = invoice.expiryDate
+      ? new Date(invoice.expiryDate).toISOString().split("T")[0]
+      : "-";
     return (
       invoice.clientProductId?.toLowerCase().includes(term) ||
       invoice.productName?.toLowerCase().includes(term) ||
       invoice.referenceNumber?.toLowerCase().includes(term) ||
-      invoice.status?.toLowerCase().includes(term) 
+      invoice.status?.toLowerCase().includes(term) ||
+      dueDate.toLowerCase().includes(term)
     );
   });
-  
 
   const handleViewInvoice = (invoice) => {
     setSelectedInvoice(invoice);

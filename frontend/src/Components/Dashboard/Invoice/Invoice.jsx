@@ -20,7 +20,6 @@ export default function Invoice() {
       </div>
       <hr id="invoice-navbar-hr" />
       <div className="invoice-content-container">
-        {/* Pass searchTerm as prop */}
         <OverrallInvoice searchTerm={searchTerm} />
         <InvoiceTable searchTerm={searchTerm} />       
       </div>
