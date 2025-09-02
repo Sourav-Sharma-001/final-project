@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./LoginYourAcc.css";
-import logo from "../../../../../Images/frame.png";
-import frame from "../../../../../Images/frame2.png";
+import logo from "./Images/frame.png";
+import frame from "./Images/frame2.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";

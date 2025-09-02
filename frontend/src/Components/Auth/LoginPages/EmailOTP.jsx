@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginYourAcc.css";
-import logo from "./../../../Images/frame.png";
-import frame from "./../../../Images/frame2.png";
+import logo from "./Images/frame.png";
+import frame from "./Images/frame2.png";
 
 export default function LoginYourAcc() {
   const [email, setEmail] = useState("");

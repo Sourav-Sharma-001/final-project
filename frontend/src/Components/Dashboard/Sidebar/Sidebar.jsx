@@ -8,7 +8,7 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../../../Images/frame.png";
+import logo from "./Images/frame.png";
 import "./Sidebar.css";
 import { AppContext } from "../../ContextAPI/ContextAPI";
 

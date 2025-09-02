@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ResetPassword.css";
-import frame from "./../../../Images/frame5.png";
+import frame from "./Imagesframe5.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
