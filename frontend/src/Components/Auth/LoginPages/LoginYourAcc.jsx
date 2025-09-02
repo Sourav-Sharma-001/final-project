@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./LoginYourAcc.css";
-import logo from "../../../../../Images/frame.png";
-import frame from "../../../../../Images/frame2.png";
+import logo from "../../../../../images/frame.png";
+import frame from "../../../../../images/frame2.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -15,11 +15,14 @@ export default function LoginYourAcc() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://your-backend.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://your-backend.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
@@ -63,7 +66,9 @@ export default function LoginYourAcc() {
             />
 
             <div className="forgot-password">
-              <a onClick={() => navigate("/forgot-password")}>Forgot password?</a>
+              <a onClick={() => navigate("/forgot-password")}>
+                Forgot password?
+              </a>
             </div>
 
             <button type="submit">Sign in</button>

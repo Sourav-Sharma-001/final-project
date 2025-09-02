@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginYourAcc.css";
-import logo from "../../../../../Images/frame.png";
-import frame from "../../../../../Images/frame2.png";
+import logo from "../../../../../images/frame.png";
+import frame from "../../../../../images/frame2.png";
 
 export default function LoginYourAcc() {
   const [email, setEmail] = useState("");
@@ -13,11 +13,14 @@ export default function LoginYourAcc() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://your-backend.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://your-backend.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 

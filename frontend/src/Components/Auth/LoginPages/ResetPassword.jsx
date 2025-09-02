@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ResetPassword.css";
-import frame from "../../../../../Images/frame5.png";
+import frame from "../../../../../images/frame5.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -35,11 +35,14 @@ export default function ResetPassword() {
     }
 
     try {
-      const res = await fetch("https://your-backend.onrender.com/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp, newPassword: password }),
-      });
+      const res = await fetch(
+        "https://your-backend.onrender.com/reset-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp, newPassword: password }),
+        }
+      );
 
       const data = await res.json();
 
@@ -76,7 +79,10 @@ export default function ResetPassword() {
                 placeholder="Enter new password"
                 required
               />
-              <span className="icon" onClick={() => setShowPassword(!showPassword)}>
+              <span
+                className="icon"
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
@@ -90,7 +96,10 @@ export default function ResetPassword() {
                 placeholder="Confirm new password"
                 required
               />
-              <span className="icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <span
+                className="icon"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>

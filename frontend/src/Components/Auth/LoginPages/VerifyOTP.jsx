@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./VerifyOTP.css";
-import frame from "../../../../../Images/frame4.png";
+import frame from "../../../../../images/frame4.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -30,7 +30,10 @@ export default function VerifyOTP() {
 
       if (res.ok) {
         toast.success(data.message || "OTP verified successfully ✅");
-        setTimeout(() => navigate("/reset-password", { state: { email, otp } }), 2000);
+        setTimeout(
+          () => navigate("/reset-password", { state: { email, otp } }),
+          2000
+        );
       } else {
         toast.error(data.message || "Invalid OTP ❌");
       }
