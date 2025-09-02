@@ -12,34 +12,35 @@ import {
 import "./Chart.css";
 
 const Chart = () => {
-  const monthlyData = [
-    { name: "Jan", Sales: 20000, Purchase: 15000 },
-    { name: "Feb", Sales: 25000, Purchase: 20000 },
-    { name: "Mar", Sales: 18000, Purchase: 16000 },
-    { name: "Apr", Sales: 22000, Purchase: 19000 },
-    { name: "May", Sales: 27000, Purchase: 23000 },
-    { name: "Jun", Sales: 30000, Purchase: 25000 },
-    { name: "Jul", Sales: 28000, Purchase: 24000 },
-    { name: "Aug", Sales: 26000, Purchase: 22000 },
-    { name: "Sep", Sales: 32000, Purchase: 28000 },
-    { name: "Oct", Sales: 35000, Purchase: 30000 },
-    { name: "Nov", Sales: 33000, Purchase: 29000 },
-    { name: "Dec", Sales: 37000, Purchase: 31000 },
+  // Updated weekly data with simple numbers
+  const weeklyData = [
+    { name: "Week 1", Sales: 50, Purchase: 40 },
+    { name: "Week 2", Sales: 100, Purchase: 80 },
+    { name: "Week 3", Sales: 150, Purchase: 120 },
+    { name: "Week 4", Sales: 80, Purchase: 60 },
   ];
 
-  const weeklyData = [
-    { name: "Week 1", Sales: 5000, Purchase: 4000 },
-    { name: "Week 2", Sales: 6000, Purchase: 4500 },
-    { name: "Week 3", Sales: 7000, Purchase: 4800 },
-    { name: "Week 4", Sales: 8000, Purchase: 5200 },
+  const monthlyData = [
+    { name: "Jan", Sales: 200, Purchase: 150 },
+    { name: "Feb", Sales: 250, Purchase: 200 },
+    { name: "Mar", Sales: 180, Purchase: 160 },
+    { name: "Apr", Sales: 220, Purchase: 190 },
+    { name: "May", Sales: 270, Purchase: 230 },
+    { name: "Jun", Sales: 300, Purchase: 250 },
+    { name: "Jul", Sales: 280, Purchase: 240 },
+    { name: "Aug", Sales: 260, Purchase: 220 },
+    { name: "Sep", Sales: 320, Purchase: 280 },
+    { name: "Oct", Sales: 350, Purchase: 300 },
+    { name: "Nov", Sales: 330, Purchase: 290 },
+    { name: "Dec", Sales: 370, Purchase: 310 },
   ];
 
   const yearlyData = [
-    { name: "2020", Sales: 150000, Purchase: 120000 },
-    { name: "2021", Sales: 180000, Purchase: 140000 },
-    { name: "2022", Sales: 200000, Purchase: 160000 },
-    { name: "2023", Sales: 220000, Purchase: 190000 },
-    { name: "2024", Sales: 250000, Purchase: 210000 },
+    { name: "2020", Sales: 1500, Purchase: 1200 },
+    { name: "2021", Sales: 1800, Purchase: 1400 },
+    { name: "2022", Sales: 2000, Purchase: 1600 },
+    { name: "2023", Sales: 2200, Purchase: 1900 },
+    { name: "2024", Sales: 2500, Purchase: 2100 },
   ];
 
   const [chartData, setChartData] = useState(weeklyData);
