@@ -1,0 +1,156 @@
+.auth-parent {
+  background-color: #242531;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.left {
+  background-color: #E0E0E2;
+  width: 40vw;
+  height: 100vh;
+  border-top-right-radius: 5%;
+  border-bottom-right-radius: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  background: #E0E0E2;
+}
+
+.login-form {
+  width: 40vh;
+  padding: 4vh;
+}
+
+.login-form h2 {
+  margin-bottom: 3vh;
+  color: #2B2F38;
+}
+
+.form-subtitle {
+  font-size: 1.8vh;
+  margin-bottom: 4vh;
+  color: #667085;
+}
+
+.login-form label {
+  font-size: 1.8vh;
+}
+
+.login-form input {
+  display: block;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+  width: 93%;
+  padding: 1.5vh;
+  font-size: 2vh;
+  border: none;
+  border-radius: 1vh;
+  background-color: white;
+  outline: none;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 2.5vh;
+}
+
+.forgot-password a {
+  font-size: 1.8vh;
+  color: #007bff;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 1.8vh;
+  font-size: 2vh;
+  background: #242531;
+  color: white;
+  border: none;
+  border-radius: 1vh;
+  cursor: pointer;
+}
+
+.signup-link {
+  margin-top: 3vh;
+  text-align: center;
+}
+
+.signup-link span {
+  font-size: 1.8vh;
+  color: #667085;
+}
+
+.signup-link a {
+  font-size: 1.8vh;
+  color: #007bff;
+}
+
+.message {
+  margin-top: 2vh;
+  text-align: center;
+}
+
+.right {  
+  width: 60vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-container {
+  width: 70%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-logo-container {
+  width: 100%;
+  height: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-container {
+  width: 70%;
+  height: 90%;
+  margin-left: 10%;
+}
+
+.text-container h1 {
+  color: white;
+}
+
+.logo-container {
+  width: 30%;
+  height: 90%;
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+}
+
+.logo-container img {
+  width: 30%;
+  height: 30%;
+}
+
+.frame-container {
+  width: 100%;
+  height: 70%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.frame-container img {
+  margin-top: 5%;
+}

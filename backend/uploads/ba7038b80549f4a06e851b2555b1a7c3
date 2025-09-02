@@ -1,0 +1,11 @@
+clientProductId,autoProductId,productName,category,price,quantity,unit,expiryDate,threshold,image,status
+P001,uuid-1,Apple,Fruit,100,50,kg,2025-12-31,10,,Active
+P002,uuid-2,Banana,Fruit,30,100,kg,2025-11-30,20,,Active
+P003,uuid-3,Carrot,Vegetable,40,60,kg,2025-10-15,15,,Active
+P004,uuid-4,Detergent,Cleaning,200,30,pcs,2026-01-01,5,,Active
+P005,uuid-5,Flour,Baking,50,100,kg,2026-03-10,10,,Active
+P006,uuid-6,Milk,Dairy,60,80,ltr,2025-09-25,10,,Active
+P007,uuid-7,Orange,Fruit,90,40,kg,2025-12-15,10,,Active
+P008,uuid-8,Rice,Grain,70,150,kg,2026-02-20,15,,Active
+P009,uuid-9,Sugar,Baking,45,200,kg,2026-05-05,20,,Active
+P010,uuid-10,Tomato,Vegetable,55,70,kg,2025-11-10,15,,Active

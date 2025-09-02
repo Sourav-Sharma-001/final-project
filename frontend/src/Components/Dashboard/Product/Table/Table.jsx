@@ -1,0 +1,198 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Table.css";
+import Multiple from "./Multiple/Multiple";
+
+export default function Table({ searchTerm }) {
+  const [showModal, setShowModal] = useState(false);
+  const [showMultiple, setShowMultiple] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [refreshFlag, setRefreshFlag] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const rowsPerPage = 9;
+  const navigate = useNavigate();
+
+  const dropdownRefs = useRef({});
+
+  useEffect(() => {
+    fetchProducts(currentPage);
+  }, [refreshFlag, currentPage]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!Object.values(dropdownRefs.current).some(ref => ref && ref.contains(event.target))) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const fetchProducts = async (page = 1) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/products?page=${page}&limit=${rowsPerPage}`);
+      setProducts(res.data.products || []);
+      setTotalPages(res.data.totalPages || 1);
+      setCurrentPage(res.data.currentPage || 1);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  };
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+  const openMultiple = () => {
+    setShowModal(false);
+    setShowMultiple(true);
+  };
+
+  const closeMultiple = () => setShowMultiple(false);
+
+  const handleUploadSuccess = () => {
+    setRefreshFlag(f => !f);
+    setShowMultiple(false);
+  };
+
+  const goToIndividual = () => {
+    setShowModal(false);
+    navigate("/product/individual");
+  };
+
+  const toggleDropdown = (index) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/product/individual/${id}`);
+    setOpenDropdown(null);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      setRefreshFlag(f => !f);
+      setOpenDropdown(null);
+    } catch (err) {
+      console.error("Error deleting product:", err);
+    }
+  };
+
+  const getAvailability = (quantity, threshold) => {
+    if (quantity === 0) return { text: "Out of Stock", className: "out-of-stock" };
+    if (quantity <= threshold) return { text: "Low Stock", className: "low-stock" };
+    return { text: "In Stock", className: "in-stock" };
+  };
+
+  // Filter products across all columns
+  const filteredProducts = products.filter(product => {
+    const availability = getAvailability(product.quantity, product.threshold);
+    const expiry = product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "";
+    const term = searchTerm.toLowerCase();
+
+    return (
+      product.productName.toLowerCase().includes(term) ||
+      product.price.toString().includes(term) ||
+      product.quantity.toString().includes(term) ||
+      product.threshold.toString().includes(term) ||
+      expiry.includes(term) ||
+      availability.text.toLowerCase().includes(term)
+    );
+  });
+
+  return (
+    <div className="table-container">
+      <div className="table-heading">
+        <h2>Products</h2>
+        <button onClick={openModal}>Add Product</button>
+      </div>
+
+      <div className="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Threshold Value</th>
+              <th>Expiry Date</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product, i) => {
+                const availability = getAvailability(product.quantity, product.threshold);
+                return (
+                  <tr key={product._id}>
+                    <td>{product.productName}</td>
+                    <td>₹ {product.price}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.threshold}</td>
+                    <td>{product.expiryDate ? new Date(product.expiryDate).toLocaleDateString() : "N/A"}</td>
+                    <td className={`availability-cell ${availability.className}`}>
+                      <span className="availability-text">{availability.text}</span>
+                      <div
+                        className="dropdown-wrapper"
+                        ref={el => dropdownRefs.current[i] = el}
+                      >
+                        <button className="dots-button" onClick={() => toggleDropdown(i)}>⋮</button>
+                        {openDropdown === i && (
+                          <div className="dropdown-menu">
+                            <div className="dropdown-item" onClick={() => handleEdit(product._id)}>Edit</div>
+                            <div className="dropdown-item" onClick={() => handleDelete(product._id)}>Delete</div>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>No products found</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pagination">
+        <button
+          className="pagination-button"
+          onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="pagination-info">Page {currentPage} of {totalPages}</span>
+        <button
+          className="pagination-button"
+          onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
+      {showModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <button className="modal-button" onClick={goToIndividual}>Individual Product</button>
+            <button className="modal-button" onClick={openMultiple}>Multiple Product</button>
+          </div>
+        </div>
+      )}
+
+      {showMultiple && (
+        <Multiple
+          onClose={closeMultiple}
+          onUploadSuccess={handleUploadSuccess}
+        />
+      )}
+    </div>
+  );
+}
