@@ -73,7 +73,7 @@ export default function Table({ searchTerm }) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`https://your-backend.onrender.com/api/products/${id}`);
       setRefreshFlag(f => !f);
       setOpenDropdown(null);
     } catch (err) {

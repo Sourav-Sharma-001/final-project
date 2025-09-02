@@ -52,10 +52,10 @@ export default function Individual() {
     const productData = { clientProductId, productName, category, price, quantity, unit, expiryDate, threshold, image };
     try {
       if (id) {
-        await axios.put(`http://localhost:5000/api/products/${id}`, productData);
+        await axios.put(`https://your-backend.onrender.com/api/products/${id}`, productData);
         toast.success("Product updated successfully!");
       } else {
-        await axios.post("http://localhost:5000/api/products", productData);
+        await axios.post("https://your-backend.onrender.com/api/products", productData);
         toast.success("Product added successfully!");
       }
       navigate("/product");

@@ -63,7 +63,7 @@ export default function InvoiceTable({ searchTerm }) {
   const confirmDelete = async () => {
     if (!deleteConfirm) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${deleteConfirm.invoice._id}`);
+      await axios.delete(`https://your-backend.onrender.com/api/products/${deleteConfirm.invoice._id}`);
       fetchProducts();
       triggerRefresh();
       setDeleteConfirm(null);
@@ -78,7 +78,7 @@ export default function InvoiceTable({ searchTerm }) {
     if (invoice.status === "Paid") return;
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/products/pay/${invoice._id}`
+        `https://your-backend.onrender.com/api/products/pay/${invoice._id}`
       );
       setProducts((prev) =>
         prev.map((p) => (p._id === res.data._id ? res.data : p))
