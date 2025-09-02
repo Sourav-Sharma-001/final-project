@@ -3,35 +3,51 @@ import "./ResetPassword.css";
 import frame from "../../../../../Images/frame5.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
+export default function ResetPassword() {
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const sendOTP = async (e) => {
+  const { email, otp } = location.state || {};
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const resetPassword = async (e) => {
     e.preventDefault();
 
-    if (!email) {
-      toast.error("Please enter your email ❌");
+    if (!email || !otp) {
+      toast.error("Email or OTP missing. Please try again ❌");
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters ❌");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match ❌");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/forgot-password", {
+      const res = await fetch("http://localhost:5000/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, otp, newPassword: password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        toast.success(data.message || "OTP sent to your email ✅");
-        // Redirect to OTP verification page with email
-        setTimeout(() => navigate("/verify-otp", { state: { email } }), 2000);
+        toast.success(data.message || "Password reset successfully ✅");
+        setTimeout(() => navigate("/login"), 2000);
       } else {
-        toast.error(data.message || "Failed to send OTP ❌");
+        toast.error(data.message || "Failed to reset password ❌");
       }
     } catch (err) {
       toast.error("Server error ❌");
@@ -42,22 +58,44 @@ export default function ForgotPassword() {
     <div className="auth-parent">
       <div className="left">
         <div className="form-container">
-          <form onSubmit={sendOTP} className="forgot-form">
-            <h2>Forgot Password</h2>
-            <p className="form-subtitle">
-              Enter your registered email to receive OTP.
-            </p>
+          <form onSubmit={resetPassword} className="reset-form">
+            <h2>Create New Password</h2>
+            <div className="form-subtitle">
+              Today is new day. It's your day. You shape it.
+            </div>
+            <div className="form-subtitle2">
+              Sign in to start managing your project.
+            </div>
 
-            <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-            />
+            <label>New Password</label>
+            <div className="input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter new password"
+                required
+              />
+              <span className="icon" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
 
-            <button type="submit">Send OTP</button>
+            <label>Confirm Password</label>
+            <div className="input-container">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                required
+              />
+              <span className="icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            <button type="submit">Reset Password</button>
           </form>
         </div>
       </div>
@@ -67,7 +105,6 @@ export default function ForgotPassword() {
           <img src={frame} alt="frame" />
         </div>
       </div>
-
       <ToastContainer />
     </div>
   );

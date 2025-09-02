@@ -15,7 +15,7 @@ export default function LoginYourAcc() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -25,7 +25,7 @@ export default function LoginYourAcc() {
 
       if (res.ok) {
         toast.success(data.message || "Login successful ✅");
-        setTimeout(() => navigate("/forgot-password"), 1000); // Example: redirect to forgot-password or dashboard
+        navigate("/"); // Redirect to Home.jsx
       } else {
         toast.error(data.message || "Invalid credentials ❌");
       }
