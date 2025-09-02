@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./VerifyOTP.css";
-import frame from "../../../../../Images/frame4.png";
+import frame from "./../../../Images/frame4.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useLocation } from "react-router-dom";
