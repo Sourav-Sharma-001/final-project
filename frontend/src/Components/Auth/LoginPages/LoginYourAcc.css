@@ -1,156 +1,184 @@
 .auth-parent {
   background-color: #242531;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column; /* Mobile first */
 }
 
 .left {
   background-color: #E0E0E2;
-  width: 40vw;
-  height: 100vh;
-  border-top-right-radius: 5%;
-  border-bottom-right-radius: 5%;
+  width: 100%;
+  min-height: 50vh;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
 }
 
 .form-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
-  background: #E0E0E2;
+  width: 100%;
 }
 
 .login-form {
-  width: 40vh;
-  padding: 4vh;
+  width: 100%;
+  max-width: 25rem; /* responsive form width */
+  padding: 2rem;
+  background: #E0E0E2;
+  border-radius: 0.5rem;
 }
 
 .login-form h2 {
-  margin-bottom: 3vh;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
   color: #2B2F38;
 }
 
 .form-subtitle {
-  font-size: 1.8vh;
-  margin-bottom: 4vh;
+  font-size: 1rem;
+  margin-bottom: 2rem;
   color: #667085;
 }
 
 .login-form label {
-  font-size: 1.8vh;
+  font-size: 1rem;
 }
 
 .login-form input {
   display: block;
-  margin-top: 1vh;
-  margin-bottom: 2vh;
-  width: 93%;
-  padding: 1.5vh;
-  font-size: 2vh;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1rem;
   border: none;
-  border-radius: 1vh;
+  border-radius: 0.5rem;
   background-color: white;
   outline: none;
 }
 
 .forgot-password {
   text-align: right;
-  margin-bottom: 2.5vh;
+  margin-bottom: 1.2rem;
 }
 
 .forgot-password a {
-  font-size: 1.8vh;
+  font-size: 0.95rem;
   color: #007bff;
+  cursor: pointer;
 }
 
 .login-form button {
   width: 100%;
-  padding: 1.8vh;
-  font-size: 2vh;
+  padding: 1rem;
+  font-size: 1rem;
   background: #242531;
   color: white;
   border: none;
-  border-radius: 1vh;
+  border-radius: 0.5rem;
   cursor: pointer;
 }
 
 .signup-link {
-  margin-top: 3vh;
+  margin-top: 1.5rem;
   text-align: center;
 }
 
 .signup-link span {
-  font-size: 1.8vh;
+  font-size: 0.95rem;
   color: #667085;
 }
 
 .signup-link a {
-  font-size: 1.8vh;
+  font-size: 0.95rem;
   color: #007bff;
+  cursor: pointer;
 }
 
 .message {
-  margin-top: 2vh;
+  margin-top: 1rem;
   text-align: center;
 }
 
-.right {  
-  width: 60vw;
-  height: 100vh;
+.right {
+  width: 100%;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.right-container {
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.text-container {
+  flex: 1;
+}
+
+.text-container h1 {
+  color: white;
+  font-size: 2rem;
+}
+
+.logo-container {
+  width: 6rem;
+  height: 6rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.right-container {
-  width: 70%;
-  height: 70%;
-  display: flex;
-  flex-direction: column;
-}
-
-.text-logo-container {
-  width: 100%;
-  height: 30%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.text-container {
-  width: 70%;
-  height: 90%;
-  margin-left: 10%;
-}
-
-.text-container h1 {
-  color: white;
-}
-
-.logo-container {
-  width: 30%;
-  height: 90%;
-  display: flex;
-  justify-content: center;  
-  align-items: center;
-}
-
 .logo-container img {
-  width: 30%;
-  height: 30%;
+  width: 100%;
+  height: auto;
 }
 
 .frame-container {
   width: 100%;
-  height: 70%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .frame-container img {
-  margin-top: 5%;
+  max-width: 100%;
+  height: auto;
+  margin-top: 1.5rem;
+}
+
+/* 🔹 Responsive Layout for larger screens */
+@media (min-width: 768px) {
+  .auth-parent {
+    flex-direction: row;
+  }
+
+  .left {
+    width: 40%;
+    min-height: 100vh;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+  }
+
+  .right {
+    width: 60%;
+    min-height: 100vh;
+  }
 }
