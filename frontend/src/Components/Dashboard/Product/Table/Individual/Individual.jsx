@@ -21,7 +21,7 @@ export default function Individual() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/api/products/${id}`).then((res) => {
+      axios.get(`https://your-backend.onrender.com/api/products/${id}`).then((res) => {
         const p = res.data;
         setProductName(p.productName);
         setClientProductId(p.clientProductId);

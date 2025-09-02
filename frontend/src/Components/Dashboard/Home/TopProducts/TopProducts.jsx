@@ -8,7 +8,7 @@ export default function TopProducts() {
   useEffect(() => {
     const fetchTopProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products?limit=1000");
+        const res = await axios.get("https://your-backend.onrender.com/api/products?limit=1000");
         const products = res.data.products || [];
 
         const sorted = [...products]

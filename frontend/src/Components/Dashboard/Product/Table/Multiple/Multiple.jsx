@@ -50,7 +50,7 @@ export default function Multiple({ onClose, onUploadSuccess }) {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/products/upload-csv", {
+      const res = await fetch("https://your-backend.onrender.com/api/products/upload-csv", {
         method: "POST",
         body: formData,
       });

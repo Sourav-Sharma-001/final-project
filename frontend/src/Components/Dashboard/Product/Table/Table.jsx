@@ -33,7 +33,7 @@ export default function Table({ searchTerm }) {
 
   const fetchProducts = async (page = 1) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products?page=${page}&limit=${rowsPerPage}`);
+      const res = await axios.get(`https://your-backend.onrender.com/api/products?page=${page}&limit=${rowsPerPage}`);
       setProducts(res.data.products || []);
       setTotalPages(res.data.totalPages || 1);
       setCurrentPage(res.data.currentPage || 1);

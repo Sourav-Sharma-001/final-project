@@ -21,7 +21,7 @@ export default function Statistic() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://your-backend.onrender.com/api/products");
         const products = res.data.products || [];
 
         const sevenDaysAgo = new Date();

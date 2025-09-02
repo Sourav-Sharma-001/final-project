@@ -16,7 +16,7 @@ export default function OverrallInvoice() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products?limit=1000");
+      const res = await axios.get("https://your-backend.onrender.com/api/products?limit=1000");
       const data = res.data.products || [];
       setProducts(data);
 

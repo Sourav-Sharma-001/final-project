@@ -20,7 +20,7 @@ export default function InvoiceTable({ searchTerm }) {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/products?page=${currentPage}&limit=${rowsPerPage}`
+        `https://your-backend.onrender.com/api/products?page=${currentPage}&limit=${rowsPerPage}`
       );
       setProducts(res.data.products || []);
       setTotalPages(res.data.totalPages || 1);

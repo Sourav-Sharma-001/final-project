@@ -10,7 +10,7 @@ export default function InventorySummary() {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products?limit=1000");
+        const res = await axios.get("https://your-backend.onrender.com/api/products?limit=1000");
         const products = res.data.products || [];
 
         const totalQuantity = products.reduce((acc, p) => acc + (p.quantity || 0), 0);

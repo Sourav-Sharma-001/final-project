@@ -8,7 +8,7 @@ export default function OverallInventory() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://your-backend.onrender.com/api/products");
         setProducts(res.data.products || []);
       } catch (err) {
         console.error(err);

@@ -11,7 +11,7 @@ export default function PurchaseSummary() {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products?limit=1000");
+        const res = await axios.get("https://your-backend.onrender.com/api/products?limit=1000");
         const products = res.data.products || [];
 
         const suppliers = new Set(products.map(p => p.supplier || "Unknown"));
