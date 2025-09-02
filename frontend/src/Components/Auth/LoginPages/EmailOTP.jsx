@@ -1,45 +1,49 @@
 import React, { useState } from "react";
-import "./EmailOTP.css";
-import frame from "../../../../Images/frame3.png";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./LoginYourAcc.css";
+import logo from "../../../../../Images/frame.png";
+import frame from "../../../../../Images/frame2.png";
 
-export default function EmailOTP() {
+export default function LoginYourAcc() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const sendOtp = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
     try {
-      const res = await fetch("http://localhost:5000/send-otp", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        toast.success(data.message || "OTP sent successfully ✅");
+        toast.success(data.message || "Login successful ✅");
+        // Save JWT to localStorage
+        localStorage.setItem("token", data.token);
       } else {
-        toast.error(data.message || "Failed to send OTP ❌");
+        toast.error(data.message || "Invalid credentials ❌");
       }
-    } catch {
+    } catch (err) {
       toast.error("Server error ❌");
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendOtp();
   };
 
   return (
     <div className="auth-parent">
       <div className="left">
         <div className="form-container">
-          <form onSubmit={handleSubmit} className="signup-form">
-            <h2>Company name</h2>
-            <p className="form-subtitle">Please enter your registered email ID to recieve an OTP.</p>
-            <label>E-mail</label>
+          <form onSubmit={handleLogin} className="login-form">
+            <h2>Sign in to your account</h2>
+            <p className="form-subtitle">
+              Welcome back! Please enter your details.
+            </p>
+
+            <label>Email</label>
             <input
               type="email"
               value={email}
@@ -47,16 +51,48 @@ export default function EmailOTP() {
               placeholder="Enter your email"
               required
             />
-            <button type="submit">Send OTP</button>
+
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+
+            <div className="forgot-password">
+              <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit">Sign in</button>
+
+            <div className="signup-link">
+              <span>Don’t have an account? </span>
+              <a href="#">Sign up</a>
+            </div>
           </form>
         </div>
       </div>
+
       <div className="right">
         <div className="right-container">
-          <img src={frame} alt="frame" />
+          <div className="text-logo-container">
+            <div className="text-container">
+              <h1>Welcome to</h1>
+              <h1>Company Name</h1>
+            </div>
+            <div className="logo-container">
+              <img src={logo} alt="logo" />
+            </div>
+          </div>
+          <div className="frame-container">
+            <img src={frame} alt="frame" />
+          </div>
         </div>
       </div>
-      <ToastContainer />
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }

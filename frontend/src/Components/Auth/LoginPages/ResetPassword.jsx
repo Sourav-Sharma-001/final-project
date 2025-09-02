@@ -1,42 +1,37 @@
 import React, { useState } from "react";
 import "./ResetPassword.css";
-import frame from "../../../../Images/frame5.png";
+import frame from "../../../../../Images/frame5.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-export default function ResetPassword() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
-  const resetPassword = async (e) => {
+  const sendOTP = async (e) => {
     e.preventDefault();
 
-    if (password.length < 8) {
-      toast.error("Password must be at least 8 characters ❌");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match ❌");
+    if (!email) {
+      toast.error("Please enter your email ❌");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/reset-password", {
+      const res = await fetch("http://localhost:5000/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        toast.success(data.message || "Password reset successfully ✅");
+        toast.success(data.message || "OTP sent to your email ✅");
+        // Redirect to OTP verification page with email
+        setTimeout(() => navigate("/verify-otp", { state: { email } }), 2000);
       } else {
-        toast.error(data.message || "Failed to reset password ❌");
+        toast.error(data.message || "Failed to send OTP ❌");
       }
     } catch (err) {
       toast.error("Server error ❌");
@@ -47,40 +42,22 @@ export default function ResetPassword() {
     <div className="auth-parent">
       <div className="left">
         <div className="form-container">
-          <form onSubmit={resetPassword} className="reset-form">
-            <h2>Create New Password</h2>
-            <div className="form-subtitle">Today is new day. It's yor day. You shape it.</div>
-            <div className="form-subtitle2">Sign in to start managing your project.</div>
+          <form onSubmit={sendOTP} className="forgot-form">
+            <h2>Forgot Password</h2>
+            <p className="form-subtitle">
+              Enter your registered email to receive OTP.
+            </p>
 
-            <label>New Password</label>
-            <div className="input-container">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter new password"
-                required
-              />
-              <span className="icon" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
 
-            <label>Confirm Password</label>
-            <div className="input-container">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm new password"
-                required
-              />
-              <span className="icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-
-            <button type="submit">Reset Password</button>
+            <button type="submit">Send OTP</button>
           </form>
         </div>
       </div>
@@ -90,6 +67,7 @@ export default function ResetPassword() {
           <img src={frame} alt="frame" />
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

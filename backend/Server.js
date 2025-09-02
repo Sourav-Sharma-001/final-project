@@ -43,6 +43,10 @@ app.get("/", (req, res) => {
   res.send("Backend API is running");
 });
 
+const authRoutes = require("./Routes/Auth"); 
+app.use("/api/auth", authRoutes);
+
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

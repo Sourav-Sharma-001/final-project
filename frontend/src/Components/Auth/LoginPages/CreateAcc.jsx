@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./CreateAcc.css";
-import logo from "../../../../Images/frame.png";
-import frame from "../../../../Images/frame2.png";
+import logo from "../../../../../Images/frame.png";
+import frame from "../../../../../Images/frame2.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateAcc() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,6 @@ export default function CreateAcc() {
       toast.error("Password must be at least 8 characters ❌");
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error("Passwords do not match ❌");
       return;
@@ -33,6 +34,7 @@ export default function CreateAcc() {
 
       if (res.ok) {
         toast.success(data.message || "Account created successfully ✅");
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         toast.error(data.message || "Failed to create account ❌");
       }

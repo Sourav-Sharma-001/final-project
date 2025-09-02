@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "./LoginYourAcc.css";
-import logo from "../../../../Images/frame.png";
-import frame from "../../../../Images/frame2.png";
+import logo from "../../../../../Images/frame.png";
+import frame from "../../../../../Images/frame2.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginYourAcc() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,6 +25,7 @@ export default function LoginYourAcc() {
 
       if (res.ok) {
         toast.success(data.message || "Login successful ✅");
+        setTimeout(() => navigate("/forgot-password"), 1000); // Example: redirect to forgot-password or dashboard
       } else {
         toast.error(data.message || "Invalid credentials ❌");
       }
@@ -60,14 +63,14 @@ export default function LoginYourAcc() {
             />
 
             <div className="forgot-password">
-              <a href="#">Forgot password?</a>
+              <a onClick={() => navigate("/forgot-password")}>Forgot password?</a>
             </div>
 
             <button type="submit">Sign in</button>
 
             <div className="signup-link">
               <span>Don’t have an account? </span>
-              <a href="#">Sign up</a>
+              <a onClick={() => navigate("/signup")}>Sign up</a>
             </div>
           </form>
         </div>

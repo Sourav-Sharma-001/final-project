@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import "./VerifyOTP.css";
-import frame from "../../../../Images/frame4.png";
+import frame from "../../../../../Images/frame4.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function VerifyOTP() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { email } = location.state || {};
   const [otp, setOtp] = useState("");
 
   const verifyOTP = async (e) => {
@@ -19,17 +23,18 @@ export default function VerifyOTP() {
       const res = await fetch("http://localhost:5000/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp }),
+        body: JSON.stringify({ email, otp }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         toast.success(data.message || "OTP verified successfully ✅");
+        setTimeout(() => navigate("/reset-password", { state: { email, otp } }), 2000);
       } else {
         toast.error(data.message || "Invalid OTP ❌");
       }
-    } catch (err) {
+    } catch {
       toast.error("Server error ❌");
     }
   };
@@ -40,8 +45,9 @@ export default function VerifyOTP() {
         <div className="form-container">
           <form onSubmit={verifyOTP} className="otp-form">
             <h2>Enter your OTP</h2>
-            <p className="form-subtitle">We've sent the 6-digit OTP to your registered mail.</p>
-            <p className="form-subtitle">Please enter it below to sign in.</p>
+            <p className="form-subtitle">
+              We've sent the 6-digit OTP to your registered email.
+            </p>
 
             <label>OTP</label>
             <input

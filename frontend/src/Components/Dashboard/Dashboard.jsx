@@ -1,14 +1,14 @@
 import React from "react";
 import Sidebar from "./Sidebar/Sidebar";
 import Home from "./Home/Home";
-import Product from ".//Product/Product";
+import Product from "./Product/Product";
 import Invoice from "./Invoice/Invoice";
 import OverrallInvoice from "./Invoice/OverrallInvoice/OverrallInvoice";
 import Statistic from "./Statistic/Statistic";
 import Settings from "./Settings/Settings";
+import Individual from "./Product/Table/Individual/Individual";
 import { Routes, Route } from "react-router-dom";
 import "./Dashboard.css";
-import Individual from "./Product/Table/Individual/Individual";
 
 export default function Dashboard() {
   return (
